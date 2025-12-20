@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Метод Базаровой</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #0A0A0A;
+        color: #EAEFEA;
+        line-height: 1.6;
+      }
+      .font-host { font-family: 'Host Grotesk', sans-serif; }
+      .font-jost { font-family: 'Jost', sans-serif; }
+      .font-futura { font-family: 'Futura', 'Jost', sans-serif; }
+      
+      .background-glow {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        --glow-x: 0vw;
+        --glow-y: 0vh;
+      }
+      .background-glow::after {
+        content: '';
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        background: #A6FEB6;
+        border-radius: 50%;
+        filter: blur(250px);
+        opacity: 0.12;
+        bottom: -250px;
+        right: -250px;
+        transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        transform: translate(var(--glow-x), var(--glow-y));
+      }
+
+      #noise-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 9999;
+      }
+      #noise-overlay::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        filter: url(#noiseFilter);
+        opacity: 0.29;
+      }
+
+      .gradient-overlay {
+        background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.8) 100%);
+      }
+
+      /* Scrollbar Hiding */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      
+      .service-card.expanded {
+        background: rgba(255, 255, 255, 0.08);
+      }
+
+      .service-details {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease, margin-top 0.6s ease;
+        opacity: 0;
+      }
+      
+      .service-card.expanded .service-details {
+        max-height: 1200px;
+        opacity: 1;
+      }
+      
+      .service-card.expanded .service-icon-bg {
+          color: #FEA6A6;
+          background-color: rgba(254, 166, 166, 0.1);
+      }
+
+      .service-card.expanded .flex-wrap > span {
+        background-color: rgba(254, 166, 166, 0.1);
+        color: #FEA6A6;
+      }
+
+      /* Mobile Menu Fix */
+      #mobile-menu {
+        transform: translateX(100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #mobile-menu.active {
+        transform: translateX(0);
+      }
+      
+      /* Glowing effect for specific elements */
+      .glow-text {
+        text-shadow: 0 0 15px rgba(254, 166, 166, 0.3);
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease-out;
+      }
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* Global Card Shape Transitions */
+      .service-card, 
+      .article-card,
+      .process-card, 
+      .about-image-wrapper,
+      .service-icon-bg,
+      .price-block,
+      .contact-image-wrapper,
+      .faq-item {
+          border-radius: 0.5rem; /* default: rounded-lg */
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      
+      .service-card:hover, .service-card.expanded,
+      .article-card:hover,
+      .process-card:hover,
+      .faq-item:hover, .faq-item.active {
+          border-radius: 2rem; /* Increased rounding */
+      }
+      
+      .service-card:hover,
+      .article-card:hover,
+      .process-card:hover,
+      .faq-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 40px -12px rgba(0, 0, 0, 0.4);
+        background-color: rgba(255, 255, 255, 0.06);
+      }
+      
+      .service-card:hover .service-icon-bg,
+      .service-card.expanded .service-icon-bg {
+          border-radius: 1.5rem;
+      }
+
+      .service-card.expanded .price-block {
+          margin-top: 2rem;
+          padding-top: 2rem;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .contact-card:hover .contact-image-wrapper {
+          border-radius: 1.5rem;
+      }
+
+      /* FAQ Expansion */
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .faq-item.active {
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .faq-item.active .faq-answer {
+        max-height: 1200px; /* Increased max-height for timeline */
+      }
+      .faq-item.active .faq-icon {
+        transform: rotate(180deg);
+        color: #FEA6A6;
+      }
+
+      /* Education Dropdown */
+      .education-details {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease, margin-top 0.6s ease;
+        opacity: 0;
+        margin-top: 0;
+      }
+      #about-content.expanded .education-details {
+        max-height: 600px;
+        opacity: 1;
+        margin-top: 1.5rem; /* mt-6 */
+      }
+      #about-content.expanded #education-toggle svg {
+        transform: rotate(180deg);
+      }
+
+      /* Process Timeline Styles */
+      .process-timeline {
+        position: relative;
+      }
+      /* The connecting line */
+      .process-timeline::before {
+        content: '';
+        position: absolute;
+        top: 2rem;
+        bottom: 2rem;
+        width: 2px;
+        background: rgba(254, 166, 166, 0.1);
+        left: 1rem;
+        transform: translateX(-50%);
+      }
+      
+      .timeline-item {
+        position: relative;
+        padding-left: 3rem;
+        margin-bottom: 2.5rem;
+      }
+      .timeline-item:last-child {
+        margin-bottom: 0;
+      }
+
+      /* The marker */
+      .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: 1rem;
+        top: 2.2rem; /* Aligns with number */
+        transform: translateX(-50%);
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background-color: #0A0A0A;
+        border: 2px solid #FEA6A6;
+        z-index: 1;
+      }
+      
+      .process-card:hover {
+        transform: translateY(-8px) scale(1.02);
+      }
+
+      /* Desktop alternating timeline */
+      @media (min-width: 768px) {
+        .process-timeline {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        .process-timeline::before {
+          left: 50%;
+        }
+
+        .timeline-item {
+          padding-left: 0;
+          width: 50%;
+        }
+        
+        .timeline-item:nth-child(odd) {
+          align-self: flex-start;
+          padding-right: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+          align-self: flex-end;
+          padding-left: 3rem;
+        }
+        
+        .timeline-item::before {
+          top: 3.2rem;
+        }
+        
+        .timeline-item:nth-child(odd)::before {
+          left: auto;
+          right: -0.5rem;
+          transform: translateX(50%);
+        }
+
+        .timeline-item:nth-child(even)::before {
+          left: -0.5rem;
+          transform: translateX(-50%);
+        }
+      }
+
+    </style>
+  <link rel="stylesheet" href="/index.css">
+</head>
+  <body class="overflow-x-hidden">
+    <div class="background-glow"></div>
+    <div id="noise-overlay"></div>
+    <!-- Header -->
+    <nav class="fixed top-0 left-0 w-full z-[100] px-6 py-4 transition-all bg-black/5 backdrop-blur-md">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <a href="#" class="flex items-center gap-3 group">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32" class="w-12 h-8">
+            <path d="M 2.4 7.9 C 3.6 6.5 6 6.2 7.3 7.7 C 7.4 7.8 7.5 8.1 7.6 8.2 C 7.7 8.3 7.9 8 7.9 7.9 C 9.6 6 13 6.3 14 8.8 C 14.5 10.3 14.3 13.5 14.3 15.2 C 14.3 16.5 14.3 17.8 14.3 19.1 C 14.3 23.2 14.3 27.4 14.3 31.5 L 11.9 31.5 L 11.9 10.9 C 11.8 9.7 11.2 8.7 9.9 9 C 8.7 9.2 8.4 10.5 8.4 11.5 L 8.4 31.5 L 5.9 31.5 L 5.9 11.1 C 5.9 10.1 5.6 8.9 4.3 8.9 C 3 8.9 2.5 10.2 2.4 11.3 L 2.4 31.5 L 0 31.5 L 0 7 L 2.4 7 L 2.4 7.9 Z M 19.9 6.8 L 19.9 22.2 C 21 20.8 22.8 20.5 24.5 20.9 C 28 21.9 29.1 26.9 27.1 29.8 C 25.5 32.2 22 32.8 19.9 30.6 L 19.9 31.6 L 17.5 31.6 L 17.5 6.8 L 19.9 6.8 Z M 22.4 23 C 18.8 23.3 18.9 29.5 22.4 29.7 C 26.7 30.1 26.6 22.6 22.4 23 Z" fill="#FEA6A6"></path>
+            <path d="M 26.2 3.3 L 26.2 7 L 28 7 L 28 9.3 L 26.2 9.3 L 26.2 17.6 L 23.8 17.6 L 23.8 9.3 L 22.8 9.3 L 22.8 9.2 L 22.8 7 L 23.8 7 L 23.8 3.3 Z M 39.7 21.4 L 33.1 29.7 L 39.2 29.7 L 39.2 32 L 28.3 32 L 35 23.7 L 29.7 23.7 L 29.7 21.4 Z M 43.6 22.3 L 44 21.9 C 44.8 21.1 45.9 21 46.9 21.2 C 47.1 21.3 48 21.6 48 21.8 L 46.9 23.9 C 45.9 23.2 44.4 23.3 43.9 24.5 C 43.7 25.1 43.6 25.6 43.6 26.2 L 43.6 32 L 41.2 32 L 41.2 21.4 L 43.6 21.4 Z" fill="#FEA6A6"></path>
+            <path d="M 48 0 L 48 17.6 L 45.5 17.6 L 45.5 16.5 C 45.3 16.7 45.1 17 44.8 17.2 C 43.6 18.1 42.3 17.8 40.8 17.9 C 38.6 17.9 36.1 18 33.8 17.9 C 27.7 17.5 27.5 7.2 33.7 6.7 C 36.7 6.9 39.9 6.5 42.9 6.7 C 43.7 6.8 44.6 7.2 45.2 7.8 L 45.5 8.2 L 45.5 0 Z M 37.1 8.9 C 36.2 8.9 35 8.9 34.1 9 C 30.9 9.2 30.7 15.4 34.2 15.7 L 43.1 15.7 C 46.5 15.4 46.7 9.2 42.9 8.9 C 41.1 8.8 39 8.9 37.1 8.9 Z" fill="#FEA6A6"></path>
+          </svg>
+          <span class="font-futura text-2xl font-medium tracking-tight text-[#FEA6A6] group-hover:opacity-80 transition-opacity">
+            метод базаровой
+          </span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#about" class="text-xs text-[#A8B0A9] hover:text-[#EAEFEA] transition-colors uppercase font-bold tracking-[0.2em]">Об авторе</a>
+          <a href="#services" class="text-xs text-[#A8B0A9] hover:text-[#EAEFEA] transition-colors uppercase font-bold tracking-[0.2em]">Услуги</a>
+          <a href="#articles" class="text-xs text-[#A8B0A9] hover:text-[#EAEFEA] transition-colors uppercase font-bold tracking-[0.2em]">Обучение</a>
+          <a href="#faq" class="text-xs text-[#A8B0A9] hover:text-[#EAEFEA] transition-colors uppercase font-bold tracking-[0.2em]">FAQ</a>
+          <a href="#contact" class="text-xs text-[#A8B0A9] hover:text-[#EAEFEA] transition-colors uppercase font-bold tracking-[0.2em]">Контакты</a>
+        </div>
+
+        <button id="menu-toggle" class="md:hidden relative z-[110] p-2 text-[#FEA6A6]">
+          <div class="space-y-1.5 w-6">
+            <span class="block h-0.5 bg-current transition-all origin-center" id="line1"></span>
+            <span class="block h-0.5 bg-current transition-all" id="line2"></span>
+            <span class="block h-0.5 bg-current transition-all origin-center" id="line3"></span>
+          </div>
+        </button>
+      </div>
+
+      <!-- Mobile Menu Content -->
+      <div id="mobile-menu" class="fixed top-0 right-0 w-[80%] h-screen bg-[#0A0A0A] z-[105] shadow-2xl flex flex-col p-12 gap-8">
+        <div class="mt-12 space-y-8">
+          <a href="#about" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]">Об авторе</a>
+          <a href="#services" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]">Услуги</a>
+          <a href="#articles" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]">Обучение</a>
+          <a href="#faq" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]">FAQ</a>
+          <a href="#contact" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]">Контакты</a>
+        </div>
+      </div>
+      <div id="menu-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[101] hidden opacity-0 transition-opacity"></div>
+    </nav>
+
+    <!-- Hero -->
+    <header id="hero" class="relative h-[80vh] flex items-center justify-center overflow-hidden">
+      <div class="absolute inset-0 z-0 scale-105">
+        <img src="https://i.ibb.co/4gK92mpp/3.png" alt="Hero" class="w-full h-full object-cover object-bottom"/>
+      </div>
+    </header>
+
+    <!-- About -->
+    <section id="about" class="pt-8 pb-16 px-6 md:px-12 max-w-7xl mx-auto scroll-mt-20">
+        <!-- Section Header -->
+        <div class="mb-4 max-w-3xl reveal">
+            <h2 class="text-4xl md:text-5xl font-host font-medium leading-tight">
+                <span class="text-[#A8B0A9]">меня зовут</span> Алина Базарова
+            </h2>
+        </div>
+
+        <!-- Content -->
+        <div class="max-w-4xl">
+            <div id="about-content" class="transition-all duration-500 reveal" style="transition-delay: 100ms;">
+                <p class="text-base md:text-lg text-[#A8B0A9] max-w-2xl">
+                    — человек, который с детства хотел стать русалкой или ведьмой, а стал...психологом. Практикую с 2021 г. Регулярно прохожу курсы повышения квалификации, посещаю супервизионные группы. Нахожусь в личной терапии. В работе использую интегративный подход в зависимости от запроса, но отдаю предпочтение юнгианско-ориентированной терапии. Работаю с запросами личных кризисов, проблем в личных отношениях, нестабильной самооценки, комплексов. Вы всегда можете написать мне по теме своего запроса, и я расскажу работаю ли я с Вашей темой или подскажу проверенного специалиста. Люблю мемы и фотографии котиков.
+                </p>
+                <div id="education-toggle" class="cursor-pointer mt-6 inline-flex items-center justify-start gap-2 text-[#FEA6A6]/80 hover:text-[#FEA6A6] transition-colors group">
+                    <span class="text-xs font-black uppercase tracking-widest">Образование и квалификация</span>
+                    <svg class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                
+                <!-- Education Details -->
+                <div class="education-details">
+                    <ul class="list-none grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                         <li class="flex items-start gap-4">
+                            <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <div>
+                                <h4 class="font-bold text-[#EAEFEA]">Базовое психологическое образование</h4>
+                                <p class="text-sm text-[#A8B0A9]">ОмГПУ, 2021 г.</p>
+                            </div>
+                        </li>
+                         <li class="flex items-start gap-4">
+                            <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <div>
+                                <h4 class="font-bold text-[#EAEFEA]">Когнитивно-бихевиоральные технологии</h4>
+                                <p class="text-sm text-[#A8B0A9]">МИП, 2025 г.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <div>
+                                <h4 class="font-bold text-[#EAEFEA]">Терапевтическое использование сновидений</h4>
+                                <p class="text-sm text-[#A8B0A9]">МИП, 2025 г.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <div>
+                                <h4 class="font-bold text-[#EAEFEA]">Клиническая психология</h4>
+                                <p class="text-sm text-[#A8B0A9]">МИП, 2025 - по н.вр.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <div>
+                                <h4 class="font-bold text-[#EAEFEA]">Юнгианский анализ</h4>
+                                <p class="text-sm text-[#A8B0A9]">МААП, 2025 - по н.вр.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="h-px w-full bg-white/10"></div>
+    </div>
+
+    <!-- Articles -->
+    <section id="articles" class="py-16 max-w-7xl mx-auto scroll-mt-20 overflow-hidden">
+      <div class="px-6 md:px-12 mb-6 reveal">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-3 mb-6">
+              <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
+              <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#7D857E]">Обучение</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-host font-medium leading-tight">
+              <span class="text-[#7D857E]">Недавние</span> статьи
+            </h2>
+            <p class="text-base md:text-lg text-[#A8B0A9] mt-2 max-w-xl">На своих ресурсах я регулярно пишу статьи о глубинной психологии, бессознательном и интересных техниках, которые вы можете попробовать уже прямо сейчас</p>
+        </div>
+      </div>
+
+      <div class="relative reveal">
+        <button id="scroll-left" class="flex absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-black/50 backdrop-blur-md rounded-full items-center justify-center text-[#EAEFEA]/60 hover:text-[#EAEFEA] hover:bg-black/80 transition-all disabled:opacity-20 disabled:cursor-not-allowed">
+            <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        
+        <div id="articles-scroll" class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory px-6 md:px-12">
+            
+            <!-- Article Card 1 -->
+            <a href="https://t.me/mtdbzr" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
+                <div class="h-[280px] md:h-[340px] overflow-hidden">
+                    <img src="https://i.ibb.co/Swz0FMkS/1.png" alt="Изображение к статье о важности психологии" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105">
+                </div>
+                <div class="p-6 md:p-8 flex flex-col flex-grow">
+                    <h3 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors uppercase mb-3">Изнанка «милых» сновидений</h3>
+                    <p class="text-sm md:text-base text-[#A8B0A9] mb-4 flex-grow overflow-hidden">Милый сон — лишь маска. Психика будит нас, когда цензура не справляется с опасным для Эго инсайтом</p>
+                    <div class="mt-auto">
+                        <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
+                            Читать полностью
+                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Article Card 2 -->
+            <a href="https://t.me/mtdbzr" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
+                <div class="h-[280px] md:h-[340px] overflow-hidden">
+                    <img src="https://i.ibb.co/F4yms97Y/2.png" alt="Изображение к статье о тени и проекциях" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105">
+                </div>
+                <div class="p-6 md:p-8 flex flex-col flex-grow">
+                    <h3 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors uppercase mb-3">Сказка как жизненный сценарий</h3>
+                    <p class="text-sm md:text-base text-[#A8B0A9] mb-4 flex-grow overflow-hidden">Любимый сюжет детства — ваш тайный сценарий. Он выдает скрытые страхи и мешает двигаться вперед</p>
+                    <div class="mt-auto">
+                        <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
+                            Читать полностью
+                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Article Card 3 -->
+            <a href="https.me/mtdbzr" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
+                <div class="h-[280px] md:h-[340px] overflow-hidden">
+                    <img src="https://i.ibb.co/gbWSg1Q7/3.png" alt="Изображение к статье о границах личности" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105">
+                </div>
+                <div class="p-6 md:p-8 flex flex-col flex-grow">
+                    <h3 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors uppercase mb-3">Диалог с Тенью</h3>
+                    <p class="text-sm md:text-base text-[#A8B0A9] mb-4 flex-grow overflow-hidden">Забудьте сонники. Метод двух имен поможет услышать голос Тени и узнать скрытую правду о сновидении</p>
+                    <div class="mt-auto">
+                        <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
+                            Читать полностью
+                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Article Card 4 -->
+            <a href="https://t.me/mtdbzr" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
+                <div class="h-[280px] md:h-[340px] overflow-hidden">
+                    <img src="https://i.ibb.co/6c43PrKF/4.png" alt="Изображение к статье об анализе теней" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105">
+                </div>
+                <div class="p-6 md:p-8 flex flex-col flex-grow">
+                    <h3 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors uppercase mb-3">За пределами протокола</h3>
+                    <p class="text-sm md:text-base text-[#A8B0A9] mb-4 flex-grow overflow-hidden">Психоанализ нужен там, где схемы бессильны. Это способ понять смысл боли, а не просто заглушить ее</p>
+                    <div class="mt-auto">
+                        <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
+                            Читать полностью
+                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </span>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Telegram Card -->
+            <div class="article-card flex flex-col justify-center items-center text-center flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-[#0F0F0F] p-8">
+                <div class="relative z-10">
+                    <h3 class="text-xl md:text-2xl font-host font-medium uppercase mb-4 leading-tight text-[#EAEFEA]">Больше в моём <br/> Telegram-канале</h3>
+                    <p class="text-sm md:text-base font-medium mb-8 text-[#A8B0A9]">Личные мысли, разборы и оперативная связь в "Методе Базаровой". Подписывайтесь, чтобы не пропустить эксклюзивный контент.</p>
+                    <a href="https://t.me/mtdbzr" target="_blank" class="inline-flex items-center justify-center gap-3 bg-[#FEA6A6] text-black px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.08l11.96-4.55c.78-.29 1.45.14 1.25.94l-2.4 11.5c-.21.98-.82 1.23-1.6.76l-3.35-2.45-1.59 1.54c-.16.16-.3.3-.51.3z"/></svg>
+                        Перейти в канал
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <button id="scroll-right" class="flex absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-black/50 backdrop-blur-md rounded-full items-center justify-center text-[#EAEFEA]/60 hover:text-[#EAEFEA] hover:bg-black/80 transition-all disabled:opacity-20 disabled:cursor-not-allowed">
+            <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Redesigned Services (Complete List) -->
+    <section id="services" class="py-16 px-6 md:px-12 max-w-7xl mx-auto scroll-mt-20">
+      <div class="mb-6 max-w-2xl reveal">
+        <div class="inline-flex items-center gap-3 mb-6">
+          <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
+          <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#7D857E]">Услуги</span>
+        </div>
+        <h2 class="text-4xl md:text-6xl font-host font-medium leading-tight mb-6">
+          Форматы работы
+        </h2>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+        <!-- 1. ПЕРВИЧНАЯ КОНСУЛЬТАЦИЯ -->
+        <div class="service-card reveal group cursor-pointer relative flex flex-col p-10 h-fit bg-white/5" onclick="this.classList.toggle('expanded')">
+          <div class="flex items-start gap-4 mb-8">
+            <div class="service-icon-bg p-4 bg-[#A8B0A9]/10 text-[#A8B0A9]">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m9-10a4 4 0 100-8 4 4 0 000 8zm7-3a3 3 0 010 6M21 12a3 3 0 010 6" /></svg>
+            </div>
+            <div class="flex flex-wrap gap-2 pt-2 flex-1">
+              <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">50 минут</span>
+              <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">Видео</span>
+            </div>
+          </div>
+          <h3 class="text-2xl font-host font-medium text-[#EAEFEA] mb-4 uppercase">Первичная консультация</h3>
+          <p class="text-sm md:text-base text-[#A8B0A9] mb-4">Знакомимся и разбираем что внутри вас «рвется наружу» и зачем ему это надо.</p>
+          <div class="mt-auto group-[.expanded]:hidden flex items-center gap-1 text-[#FEA6A6] text-xs font-black uppercase tracking-widest">
+            Подробнее <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+          </div>
+          <div class="service-details">
+            <p class="text-[#FEA6A6] text-xs font-black uppercase tracking-widest mb-4">Зачем:</p>
+            <ul class="space-y-4 mb-8">
+              <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Прояснить запрос и сформулировать цель терапии</p></li>
+              <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Наметить вектор и предварительный план работы</p></li>
+              <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Понять, насколько вам комфортно в контакте со мной</p></li>
+            </ul>
+            <div class="price-block flex items-center justify-between gap-4">
+                <div class="text-left">
+                    <p class="text-xs uppercase text-[#7D857E] font-bold mb-1">Стоимость</p>
+                    <p class="text-xl font-host font-bold text-[#EAEFEA]">1 500 ₽</p>
+                </div>
+                <a href="https://t.me/nortlin" target="_blank" class="flex-shrink-0 px-6 py-3 rounded-full bg-[#FEA6A6] text-black font-bold text-sm uppercase tracking-widest hover:scale-105 transition-transform" onclick="event.stopPropagation()">Записаться</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. ПОВТОРНЫЕ ВИДЕОСЕССИИ -->
+        <div class="service-card reveal group cursor-pointer relative flex flex-col p-10 h-fit bg-white/5" onclick="this.classList.toggle('expanded')">
+            <div class="flex items-start gap-4 mb-8">
+              <div class="service-icon-bg p-4 bg-[#A8B0A9]/10 text-[#A8B0A9]">
+                  <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              </div>
+              <div class="flex flex-wrap gap-2 pt-2 flex-1">
+                <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">60 минут</span>
+                <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">Видео</span>
+              </div>
+            </div>
+            <h3 class="text-2xl font-host font-medium text-[#EAEFEA] mb-4 uppercase">Повторные сессии</h3>
+            <p class="text-sm md:text-base text-[#A8B0A9] mb-4">Продолжение глубокого анализа для решения внутриличностных конфликтов и знакомства с собой.</p>
+            <div class="mt-auto group-[.expanded]:hidden flex items-center gap-1 text-[#FEA6A6] text-xs font-black uppercase tracking-widest">
+              Подробнее <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="service-details">
+              <p class="text-[#FEA6A6] text-xs font-black uppercase tracking-widest mb-4">Зачем:</p>
+              <ul class="space-y-4 mb-8">
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Чтобы перестать повторять старые сценарии</p></li>
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Чтобы вернуть себе энергию, которую вы тратите на самоконтроль</p></li>
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Чтобы перестать объяснять себе чужое поведение</p></li>
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Чтобы разрешить свои внутренние конфликты</p></li>
+              </ul>
+              <div class="price-block flex items-center justify-between gap-4">
+                  <div class="text-left">
+                    <p class="text-xs uppercase text-[#7D857E] font-bold mb-1">Стоимость</p>
+                    <p class="text-xl font-host font-bold text-[#EAEFEA]">2 000 ₽</p>
+                  </div>
+                  <a href="https://t.me/nortlin" target="_blank" class="flex-shrink-0 px-6 py-3 rounded-full bg-[#FEA6A6] text-black font-bold text-sm uppercase tracking-widest hover:scale-105 transition-transform" onclick="event.stopPropagation()">Записаться</a>
+              </div>
+            </div>
+        </div>
+
+        <!-- 3. ФОРМАТ "ГОЛОСОВЫЕ" -->
+        <div class="service-card reveal group cursor-pointer relative flex flex-col p-10 h-fit bg-white/5" onclick="this.classList.toggle('expanded')">
+            <div class="flex items-start gap-4 mb-8">
+                <div class="service-icon-bg p-4 bg-[#A8B0A9]/10 text-[#A8B0A9]">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                </div>
+                <div class="flex flex-wrap gap-2 pt-2 flex-1">
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">Аудио</span>
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">60 минут</span>
+                </div>
+            </div>
+            <h3 class="text-2xl font-host font-medium text-[#EAEFEA] mb-4 uppercase">Формат "Голосовые"</h3>
+            <p class="text-sm md:text-base text-[#A8B0A9] mb-4">Час терапии в режиме аудиосообщений. Максимально адаптивный формат.</p>
+            <div class="mt-auto group-[.expanded]:hidden flex items-center gap-1 text-[#FEA6A6] text-xs font-black uppercase tracking-widest">
+              Подробнее <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="service-details">
+              <p class="text-[#FEA6A6] text-xs font-black uppercase tracking-widest mb-4">Зачем:</p>
+              <ul class="space-y-4 mb-8">
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Если нет возможности (или душевных сил) включать камеру</p></li>
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Если проще говорить «на ходу»</p></li>
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Когда нужен оперативный взгляд на ситуацию от эксперта</p></li>
+              </ul>
+              <div class="price-block flex flex-col gap-4">
+                  <div class="flex justify-between items-center">
+                    <p class="text-xs uppercase text-[#7D857E] font-bold">Первая встреча</p>
+                    <p class="text-lg font-host font-bold text-[#EAEFEA]">1 200 ₽</p>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <p class="text-xs uppercase text-[#7D857E] font-bold">Сессии</p>
+                    <p class="text-lg font-host font-bold text-[#EAEFEA]">1 700 ₽</p>
+                  </div>
+                  <a href="https://t.me/nortlin" target="_blank" class="w-full py-3 rounded-full bg-[#FEA6A6] text-black font-bold text-sm uppercase tracking-widest text-center hover:scale-[1.02] transition-transform" onclick="event.stopPropagation()">Записаться</a>
+              </div>
+            </div>
+        </div>
+
+        <!-- 4. 16 АССОЦИАЦИЙ -->
+        <div class="service-card reveal group cursor-pointer relative flex flex-col p-10 h-fit bg-white/5" onclick="this.classList.toggle('expanded')">
+            <div class="flex items-start gap-4 mb-8">
+                <div class="service-icon-bg p-4 bg-[#A8B0A9]/10 text-[#A8B0A9]">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                </div>
+                <div class="flex flex-wrap gap-2 pt-2 flex-1">
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">60 минут</span>
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">Текст</span>
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">Бессознательное</span>
+                </div>
+            </div>
+            <h3 class="text-2xl font-host font-medium text-[#EAEFEA] mb-4 uppercase">16 Ассоциаций</h3>
+            <p class="text-sm md:text-base text-[#A8B0A9] mb-4">Расшифровка техники, вскрывающей бессознательные содержания психики по Вашему запросу.</p>
+            <div class="mt-auto group-[.expanded]:hidden flex items-center gap-1 text-[#FEA6A6] text-xs font-black uppercase tracking-widest">
+              Подробнее <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="service-details">
+              <p class="text-[#FEA6A6] text-xs font-black uppercase tracking-widest mb-4">Зачем:</p>
+              <ul class="space-y-4 mb-8">
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Чтобы увидеть бессознательные мотивы Вашего поведения и аффективных реакций</p></li>
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Для поиска ключей и источника конфликта там, где сознание не дает четко сформулировать «в чем дело»</p></li>
+              </ul>
+              <div class="price-block flex items-center justify-between gap-4">
+                <div class="text-left">
+                  <p class="text-xs uppercase text-[#7D857E] font-bold mb-1">Стоимость</p>
+                  <p class="text-xl font-host font-bold text-[#EAEFEA]">2 500 ₽</p>
+                </div>
+                <a href="https://t.me/nortlin" target="_blank" class="flex-shrink-0 px-6 py-3 rounded-full bg-[#FEA6A6] text-black font-bold text-sm uppercase tracking-widest hover:scale-105 transition-transform" onclick="event.stopPropagation()">Заказать</a>
+              </div>
+            </div>
+        </div>
+
+        <!-- 5. РАЗБОР СНОВИДЕНИЯ -->
+        <div class="service-card reveal group cursor-pointer relative flex flex-col p-10 h-fit bg-white/5" onclick="this.classList.toggle('expanded')">
+            <div class="flex items-start gap-4 mb-8">
+                <div class="service-icon-bg p-4 bg-[#A8B0A9]/10 text-[#A8B0A9]">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                </div>
+                <div class="flex flex-wrap gap-2 pt-2 flex-1">
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">Юнгианство</span>
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">Аудио</span>
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">Видео</span>
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">60 минут</span>
+                </div>
+            </div>
+            <h3 class="text-2xl font-host font-medium text-[#EAEFEA] mb-4 uppercase">Разбор сновидения</h3>
+            <p class="text-sm md:text-base text-[#A8B0A9] mb-4">Анализ и расшифровка послания из Вашего бессознательного.</p>
+            <div class="mt-auto group-[.expanded]:hidden flex items-center gap-1 text-[#FEA6A6] text-xs font-black uppercase tracking-widest">
+              Подробнее <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="service-details">
+              <p class="text-[#FEA6A6] text-xs font-black uppercase tracking-widest mb-4">Зачем:</p>
+              <ul class="space-y-4 mb-8">
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Понять, почему вас преследуют кошмары</p></li>
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Что Вам хотят сказать повторяющиеся сновидения</p></li>
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Получить подсказку от бессознательного в сложный период</p></li>
+              </ul>
+               <p class="text-sm md:text-base text-[#A8B0A9] mt-6">Проводится как в формате видеосессий, так и текстовыми сообщениями.</p>
+              <div class="price-block flex items-center justify-between gap-4">
+                  <div class="text-left">
+                    <p class="text-xs uppercase text-[#7D857E] font-bold mb-1">Стоимость</p>
+                    <p class="text-xl font-host font-bold text-[#EAEFEA]">3 000 ₽</p>
+                  </div>
+                  <a href="https://t.me/nortlin" target="_blank" class="flex-shrink-0 px-6 py-3 rounded-full bg-[#FEA6A6] text-black font-bold text-sm uppercase tracking-widest hover:scale-105 transition-transform" onclick="event.stopPropagation()">Записаться</a>
+              </div>
+            </div>
+        </div>
+
+        <!-- 6. ФОРМАТ "ВСЕ КОЗЛЫ" -->
+        <div class="service-card reveal group cursor-pointer relative flex flex-col p-10 h-fit bg-white/5" onclick="this.classList.toggle('expanded')">
+            <div class="flex items-start gap-4 mb-8">
+                <div class="service-icon-bg p-4 bg-[#A8B0A9]/10 text-[#A8B0A9]">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.99 7.99 0 0120 13a7.99 7.99 0 01-2.343 5.657z" /></svg>
+                </div>
+                <div class="flex flex-wrap gap-2 pt-2 flex-1">
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">Видео</span>
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">небомбитуменя</span>
+                  <span class="text-xs font-black uppercase tracking-wider text-[#A8B0A9]/80 bg-[#A8B0A9]/5 px-3 py-1 rounded-full">60 минут</span>
+                </div>
+            </div>
+            <h3 class="text-2xl font-host font-medium text-[#EAEFEA] mb-4 uppercase">Формат "Все козлы"</h3>
+            <p class="text-sm md:text-base text-[#A8B0A9] mb-4">Экстренная эмоциональная скорая помощь. Выгрузка накипевшего. Только валидация – никаких нравоучений!</p>
+            <div class="mt-auto group-[.expanded]:hidden flex items-center gap-1 text-[#FEA6A6] text-xs font-black uppercase tracking-widest">
+              Подробнее <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </div>
+            <div class="service-details">
+              <p class="text-[#FEA6A6] text-xs font-black uppercase tracking-widest mb-4">Зачем:</p>
+              <ul class="space-y-4 mb-8">
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Выгрузить накопившиеся эмоции, чтобы не консервировать их в травму</p></li>
+                <li class="flex items-start gap-3"><div class="w-1.5 h-1.5 rounded-full bg-[#A8B0A9] mt-1.5"></div><p class="text-sm md:text-base text-[#A8B0A9]">Выговориться пока не накрыло окончательно</p></li>
+              </ul>
+              <div class="price-block flex items-center justify-between gap-4">
+                  <div class="text-left">
+                    <p class="text-xs uppercase text-[#7D857E] font-bold mb-1">Стоимость</p>
+                    <p class="text-xl font-host font-bold text-[#EAEFEA]">1 500 ₽</p>
+                  </div>
+                  <a href="https://t.me/nortlin" target="_blank" class="flex-shrink-0 px-6 py-3 rounded-full bg-[#FEA6A6] text-black font-bold text-sm uppercase tracking-widest hover:scale-105 transition-transform" onclick="event.stopPropagation()">Записаться</a>
+              </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-16 px-6 md:px-12 max-w-7xl mx-auto scroll-mt-20">
+      <div class="mb-6 max-w-2xl reveal">
+        <div class="inline-flex items-center gap-3 mb-6">
+          <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
+          <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#7D857E]">FAQ</span>
+        </div>
+        <h2 class="text-4xl md:text-5xl font-host font-medium leading-tight mb-6">
+          <span class="text-[#7D857E]">Ответы</span> на вопросы
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start reveal delay-100">
+        
+        <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 md:col-span-2">
+            <div class="flex items-center justify-between">
+                <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как проходит работа?</h4>
+                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
+                    <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="pt-6 mt-6 border-t border-white/10">
+                    
+                    <div class="process-timeline max-w-5xl mx-auto">
+                        <div class="timeline-item">
+                            <div class="process-card relative p-8 bg-black/20">
+                                <span class="absolute top-4 right-6 text-lg font-host font-black text-[#FEA6A6] block">01</span>
+                                <h4 class="font-bold text-lg mb-2 uppercase">Заявка</h4>
+                                <p class="text-sm md:text-base text-[#A8B0A9]">Пишете мне в Telegram. Мы кратко обсуждаем запрос и подбираем удобное время.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="process-card relative p-8 bg-black/20">
+                                <span class="absolute top-4 right-6 text-lg font-host font-black text-[#FEA6A6] block">02</span>
+                                <h4 class="font-bold text-lg mb-2 uppercase">Бронь</h4>
+                                <p class="text-sm md:text-base text-[#A8B0A9]">Для закрепления времени за вами требуется полная предоплата первой сессии.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="process-card relative p-8 bg-black/20">
+                                <span class="absolute top-4 right-6 text-lg font-host font-black text-[#FEA6A6] block">03</span>
+                                <h4 class="font-bold text-lg mb-2 uppercase">Сессия</h4>
+                                <p class="text-sm md:text-base text-[#A8B0A9]">Встречаемся в назначенное время онлайн в Zoom (для видеосессий) или в удобном для Вас мессенджере (для аудиоформата). Продолжительность сессии 50-60 минут.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="process-card relative p-8 bg-black/20">
+                                <span class="absolute top-4 right-6 text-lg font-host font-black text-[#FEA6A6] block">04</span>
+                                <h4 class="font-bold text-lg mb-2 uppercase">Результат</h4>
+                                <p class="text-sm md:text-base text-[#A8B0A9]">Инсайты, облегчение и конкретные шаги для дальнейшей работы над собой.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Сколько нужно сессий?</h4>
+            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
+              <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">Количество сессий обговаривается индивидуально. При принятии решения о завершении терапии обязательно проводится заключительная сессия для подведения итогов работы.</p>
+          </div>
+        </div>
+
+        <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как подготовиться?</h4>
+            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
+              <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">Специальной подготовки не требуется. На каждую сессию желательно иметь под рукой тетрадь (лист бумаги) и ручку – для записи инсайтов, а также стакан воды. О дополнительных инструментах (цветные карандаши, бОльшее количество бумаги) сообщаю заранее перед сессией.</p>
+          </div>
+        </div>
+
+        <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Работаете ли с парами?</h4>
+            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
+              <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">На данный момент я не специализируюсь на групповой (семейной терапии), но могу порекомендовать Вам соответствующих специалистов.</p>
+          </div>
+        </div>
+
+        <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Конфиденциальность?</h4>
+            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
+              <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">Все, что вы приносите на сессию – остается только на сессии, за исключением полученной информации, которая может нанести вред Вам и окружающим. В случае, если случай не входит в пределы моей компетенции – я предложу Вам обратиться к соответствующим специалистам.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">А можно ли придет моя подруга?</h4>
+            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
+              <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">В случае если я работаю с Вами, то не имею права быть психотерапевтом для близких Вам людей (муж/сестра/подруга), т.к. это может повлиять на оба процесса терапии.</p>
+          </div>
+        </div>
+        
+        <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Если я передумаю приходить на сессию?</h4>
+            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
+              <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
+          </div>
+          <div class="faq-answer">
+            <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">В случае продолжительной терапии переносы/отмена сессии производится не менее, чем за 24 часа до назначенной даты. В случае более поздней отмены – сессия оплачивается, но не производится. В случае «форсмажорной» отмены со стороны терапевта менее, чем за 24 часа – сессия переносится, а также следующая сессия будет бесплатной.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact">
+      <div class="contact-card relative reveal overflow-hidden p-12 md:p-24 text-center flex flex-col items-center justify-center min-h-[70vh]">
+        <img src="https://i.ibb.co/mCr4R11S/12.png" class="absolute inset-0 w-full h-full object-cover grayscale" alt="Contact background image">
+        <div class="absolute inset-0 bg-black/70"></div>
+        <div class="relative z-10">
+          <h2 class="text-4xl md:text-5xl font-host font-medium mb-6 uppercase">Я всегда на связи</h2>
+          <p class="text-base md:text-lg text-[#A8B0A9] mb-10 max-w-xl mx-auto">Сделайте первый шаг к пониманию себя. Выберите удобный способ для связи, и я отвечу в течение нескольких часов</p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <a href="https://vk.com/tarotdeviant" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white/10 backdrop-blur-sm text-[#EAEFEA] px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-white/20 transition-all transform hover:-translate-y-1">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"></path></svg>
+              Написать VK
+            </a>
+            <a href="https://t.me/nortlin" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#FEA6A6] text-black px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-white transition-all transform hover:-translate-y-1">
+              <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.08l11.96-4.55c.78-.29 1.45.14 1.25.94l-2.4 11.5c-.21.98-.82 1.23-1.6.76l-3.35-2.45-1.59 1.54c-.16.16-.3.3-.51.3z"/></svg>
+              Написать в Telegram
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-16 px-6">
+      <div class="max-w-7xl mx-auto flex flex-col items-center md:items-start gap-10 text-center md:text-left">
+        <a href="#" class="flex items-center gap-3 group">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32" class="w-12 h-8">
+            <path d="M 2.4 7.9 C 3.6 6.5 6 6.2 7.3 7.7 C 7.4 7.8 7.5 8.1 7.6 8.2 C 7.7 8.3 7.9 8 7.9 7.9 C 9.6 6 13 6.3 14 8.8 C 14.5 10.3 14.3 13.5 14.3 15.2 C 14.3 16.5 14.3 17.8 14.3 19.1 C 14.3 23.2 14.3 27.4 14.3 31.5 L 11.9 31.5 L 11.9 10.9 C 11.8 9.7 11.2 8.7 9.9 9 C 8.7 9.2 8.4 10.5 8.4 11.5 L 8.4 31.5 L 5.9 31.5 L 5.9 11.1 C 5.9 10.1 5.6 8.9 4.3 8.9 C 3 8.9 2.5 10.2 2.4 11.3 L 2.4 31.5 L 0 31.5 L 0 7 L 2.4 7 L 2.4 7.9 Z M 19.9 6.8 L 19.9 22.2 C 21 20.8 22.8 20.5 24.5 20.9 C 28 21.9 29.1 26.9 27.1 29.8 C 25.5 32.2 22 32.8 19.9 30.6 L 19.9 31.6 L 17.5 31.6 L 17.5 6.8 L 19.9 6.8 Z M 22.4 23 C 18.8 23.3 18.9 29.5 22.4 29.7 C 26.7 30.1 26.6 22.6 22.4 23 Z" fill="#FEA6A6"></path>
+            <path d="M 26.2 3.3 L 26.2 7 L 28 7 L 28 9.3 L 26.2 9.3 L 26.2 17.6 L 23.8 17.6 L 23.8 9.3 L 22.8 9.3 L 22.8 9.2 L 22.8 7 L 23.8 7 L 23.8 3.3 Z M 39.7 21.4 L 33.1 29.7 L 39.2 29.7 L 39.2 32 L 28.3 32 L 35 23.7 L 29.7 23.7 L 29.7 21.4 Z M 43.6 22.3 L 44 21.9 C 44.8 21.1 45.9 21 46.9 21.2 C 47.1 21.3 48 21.6 48 21.8 L 46.9 23.9 C 45.9 23.2 44.4 23.3 43.9 24.5 C 43.7 25.1 43.6 25.6 43.6 26.2 L 43.6 32 L 41.2 32 L 41.2 21.4 L 43.6 21.4 Z" fill="#FEA6A6"></path>
+            <path d="M 48 0 L 48 17.6 L 45.5 17.6 L 45.5 16.5 C 45.3 16.7 45.1 17 44.8 17.2 C 43.6 18.1 42.3 17.8 40.8 17.9 C 38.6 17.9 36.1 18 33.8 17.9 C 27.7 17.5 27.5 7.2 33.7 6.7 C 36.7 6.9 39.9 6.5 42.9 6.7 C 43.7 6.8 44.6 7.2 45.2 7.8 L 45.5 8.2 L 45.5 0 Z M 37.1 8.9 C 36.2 8.9 35 8.9 34.1 9 C 30.9 9.2 30.7 15.4 34.2 15.7 L 43.1 15.7 C 46.5 15.4 46.7 9.2 42.9 8.9 C 41.1 8.8 39 8.9 37.1 8.9 Z" fill="#FEA6A6"></path>
+          </svg>
+          <span class="font-futura text-2xl font-semibold tracking-tight text-[#FEA6A6] group-hover:opacity-80 transition-opacity">
+            метод базаровой
+          </span>
+        </a>
+        <div class="flex flex-wrap items-center justify-center md:justify-start gap-6 md:gap-8">
+            <a href="https://t.me/mtdbzr" target="_blank" class="text-xs text-[#A8B0A9] hover:text-[#EAEFEA] transition-colors uppercase font-bold tracking-[0.2em]">Telegram</a>
+            <a href="https://youtube.com/@mtdbzr" target="_blank" class="text-xs text-[#A8B0A9] hover:text-[#EAEFEA] transition-colors uppercase font-bold tracking-[0.2em]">YouTube</a>
+            <a href="https://vk.com/mtdbzr" target="_blank" class="text-xs text-[#A8B0A9] hover:text-[#EAEFEA] transition-colors uppercase font-bold tracking-[0.2em]">VK</a>
+        </div>
+      </div>
+    </footer>
+
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" xmlns="http://www.w3.org/2000/svg">
+      <filter id="noiseFilter">
+        <feTurbulence 
+          type="fractalNoise" 
+          baseFrequency="0.595" 
+          numOctaves="2" 
+          stitchTiles="stitch"
+          seed="0" />
+      </filter>
+    </svg>
+
+    <script>
+      // Dynamic Glow Effect
+      const glowElement = document.querySelector('.background-glow');
+      const heroSection = document.getElementById('hero');
+
+      function handleGlowEffect() {
+        if (!glowElement || !heroSection) return;
+
+        const scrollY = window.scrollY;
+        const heroHeight = heroSection.offsetHeight;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+        // Fade in the glow after scrolling past the hero section
+        if (scrollY < heroHeight * 0.8) {
+            glowElement.style.opacity = '0';
+        } else {
+            glowElement.style.opacity = '1';
+        }
+        
+        // Calculate scroll percentage *after* the hero section
+        const scrollAfterHero = Math.max(0, scrollY - heroHeight);
+        const scrollableHeightAfterHero = docHeight - heroHeight;
+        const scrollPercent = scrollableHeightAfterHero > 0 ? scrollAfterHero / scrollableHeightAfterHero : 0;
+
+        // Move the glow based on scroll percentage.
+        const xOffset = -50 * scrollPercent; // vw
+        const yOffset = -60 * scrollPercent; // vh
+
+        // Update CSS variables for the transform
+        glowElement.style.setProperty('--glow-x', `${xOffset}vw`);
+        glowElement.style.setProperty('--glow-y', `${yOffset}vh`);
+      }
+
+      window.addEventListener('scroll', handleGlowEffect);
+      window.addEventListener('resize', handleGlowEffect);
+      handleGlowEffect(); // Initial call
+
+      // Mobile Menu Logic
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const menuOverlay = document.getElementById('menu-overlay');
+      const l1 = document.getElementById('line1');
+      const l2 = document.getElementById('line2');
+      const l3 = document.getElementById('line3');
+
+      function toggleMenu() {
+        const isActive = mobileMenu.classList.toggle('active');
+        if (isActive) {
+          menuOverlay.classList.remove('hidden');
+          setTimeout(() => menuOverlay.classList.add('opacity-100'), 10);
+          l1.classList.add('rotate-45', 'translate-y-2');
+          l2.classList.add('opacity-0');
+          l3.classList.add('-rotate-45', '-translate-y-2');
+          document.body.style.overflow = 'hidden';
+        } else {
+          menuOverlay.classList.remove('opacity-100');
+          setTimeout(() => menuOverlay.classList.add('hidden'), 400);
+          l1.classList.remove('rotate-45', 'translate-y-2');
+          l2.classList.remove('opacity-0');
+          l3.classList.remove('-rotate-45', '-translate-y-2');
+          document.body.style.overflow = '';
+        }
+      }
+
+      menuToggle.addEventListener('click', toggleMenu);
+      menuOverlay.addEventListener('click', toggleMenu);
+      document.querySelectorAll('.mobile-link').forEach(link => link.addEventListener('click', toggleMenu));
+
+      // Horizontal Scroll Logic
+      const scrollContainer = document.getElementById('articles-scroll');
+      const scrollLeftBtn = document.getElementById('scroll-left');
+      const scrollRightBtn = document.getElementById('scroll-right');
+
+      function checkScrollButtons() {
+        if (!scrollContainer) return;
+        const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+        // Use a small tolerance for floating point inaccuracies
+        scrollLeftBtn.disabled = scrollContainer.scrollLeft <= 1;
+        scrollRightBtn.disabled = scrollContainer.scrollLeft >= maxScrollLeft - 1;
+      }
+
+      if (scrollContainer) {
+        scrollContainer.addEventListener('scroll', checkScrollButtons);
+        window.addEventListener('resize', checkScrollButtons); // Re-check on resize
+        checkScrollButtons(); // Initial check
+
+        scrollLeftBtn.addEventListener('click', () => {
+          const firstCard = scrollContainer.querySelector('.article-card');
+          if (!firstCard) return;
+          const cardWidth = firstCard.offsetWidth + 24; // 24 is the gap
+          scrollContainer.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+        });
+
+        scrollRightBtn.addEventListener('click', () => {
+          const firstCard = scrollContainer.querySelector('.article-card');
+          if (!firstCard) return;
+          const cardWidth = firstCard.offsetWidth + 24; // 24 is the gap
+          scrollContainer.scrollBy({ left: cardWidth, behavior: 'smooth' });
+        });
+      }
+
+      // Reveal On Scroll Logic
+      const reveals = document.querySelectorAll('.reveal');
+      const revealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+              if(entry.isIntersecting) {
+                  entry.target.classList.add('active');
+              }
+          });
+      }, { threshold: 0.1 });
+
+      reveals.forEach(el => revealObserver.observe(el));
+
+      // FAQ Accordion Logic
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+          item.addEventListener('click', () => {
+              item.classList.toggle('active');
+          });
+      });
+      
+      // Education Dropdown Logic
+      const educationToggle = document.getElementById('education-toggle');
+      const aboutContent = document.getElementById('about-content');
+
+      if (educationToggle && aboutContent) {
+          educationToggle.addEventListener('click', () => {
+              aboutContent.classList.toggle('expanded');
+          });
+      }
+
+      // Animated Noise Effect
+      const noiseTurbulence = document.querySelector('#noiseFilter feTurbulence');
+      let noiseFrame;
+
+      const animateNoise = () => {
+        const seed = Math.random() * 100;
+        noiseTurbulence.setAttribute('seed', seed.toString());
+        noiseFrame = requestAnimationFrame(animateNoise);
+      };
+      
+      // Start the animation
+      noiseFrame = requestAnimationFrame(animateNoise);
+    </script>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
