@@ -1,13 +1,14 @@
+
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Психоаналитически ориентированный психолог - возрождаю любовь к символам и посланиям бессознательного в эпоху протоколов и регламентов. Анализирую сновидения и достаю самое скрытое">
-    <title>Метод Базаровой</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Host+Grotesk:wght@400;500;700;900&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Метод Базаровой — Психолог Алина Базарова</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         
 
@@ -388,14 +389,33 @@ body {
   border-radius: 2px;
 }
 
+        .background-glow { opacity: 0; transition: opacity 0.5s ease; }
+        #service-modal-container:not(.hidden) { display: flex; }
+        [data-reveal-id] { opacity: 0; transform: translateY(20px); transition: all 1s cubic-bezier(0.22, 1, 0.36, 1); }
+        [data-reveal-id].active { opacity: 1; transform: translateY(0); }
+        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoom-in { from { transform: scale(0.95); } to { transform: scale(1); } }
+        .animate-in { animation-duration: 300ms; animation-fill-mode: both; }
+        .fade-in { animation-name: fade-in; }
+        .zoom-in-95 { animation-name: zoom-in; }
+        html { scroll-behavior: smooth; }
+        
+        #mobile-menu { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(100%); }
+        #mobile-menu.active { transform: translateX(0); }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Header scroll styles */
+        nav.scrolled { background-color: rgba(0, 0, 0, 0.8) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; }
+        nav.not-scrolled { background-color: rgba(0, 0, 0, 0.05) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
     </style>
-    
 </head>
-<body class="bg-[#0A0A0A] text-[#EAEFEA] font-sans overflow-x-hidden">
-<div class="background-glow"></div>
+<body class="bg-[#0A0A0A] text-[#EAEFEA] font-roboto selection:bg-[#FEA6A6] selection:text-black overflow-x-hidden">
+    <div class="background-glow"></div>
 <div id="noise-overlay"></div>
 <!-- Header -->
-<nav id="navbar" class="fixed top-0 left-0 w-full z-[100] px-6 py-4 transition-all bg-black/5 backdrop-blur-md">
+<nav class="fixed top-0 left-0 w-full z-[100] px-6 py-4 transition-all bg-black/5 backdrop-blur-md">
   <div class="max-w-7xl mx-auto flex items-center justify-between">
     <a href="#" class="flex items-center gap-3 group">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32" class="w-12 h-8">
@@ -416,7 +436,7 @@ body {
       <a href="#contact" class="text-xs text-[#A8B0A9] hover:text-[#EAEFEA] transition-colors uppercase font-bold tracking-[0.2em]">Контакты</a>
     </div>
 
-    <button id="menu-toggle" class="md:hidden relative z-[110] p-2 text-[#FEA6A6]" >
+    <button id="menu-toggle" class="md:hidden relative z-[110] p-2 text-[#FEA6A6]" onclick="toggleMenu()">
       <div class="space-y-1.5 w-6">
         <span class="block h-0.5 bg-current transition-all origin-center"   id="line1"></span>
         <span class="block h-0.5 bg-current transition-all"  id="line2"></span>
@@ -428,14 +448,14 @@ body {
   <!-- Mobile Menu Content -->
   <div id="mobile-menu" class="fixed top-0 right-0 w-[80%] h-screen bg-[#0A0A0A] z-[105] shadow-2xl flex flex-col p-12 gap-8" >
     <div class="mt-12 space-y-8">
-      <a href="#about" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" >Об авторе</a>
-      <a href="#sessions" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" >Услуги</a>
-      <a href="#articles" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" >Обучение</a>
-      <a href="#faq" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" >FAQ</a>
-      <a href="#contact" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" >Контакты</a>
+      <a href="#about" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" onclick="toggleMenu()">Об авторе</a>
+      <a href="#sessions" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" onclick="toggleMenu()">Услуги</a>
+      <a href="#articles" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" onclick="toggleMenu()">Обучение</a>
+      <a href="#faq" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" onclick="toggleMenu()">FAQ</a>
+      <a href="#contact" class="text-3xl font-host font-medium text-[#EAEFEA] mobile-link block hover:text-[#FEA6A6]" onclick="toggleMenu()">Контакты</a>
     </div>
   </div>
-  <div id="menu-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[101] transition-opacity hidden opacity-0"    tabindex="0"  ></div>
+  <div id="menu-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[101] transition-opacity"    tabindex="0" onkeydown="if(event.key==='Enter') toggleMenu()" onclick="toggleMenu()"></div>
 </nav>
 
 <!-- Hero -->
@@ -447,7 +467,7 @@ body {
 
 <!-- About -->
 <section id="about" class="pt-8 pb-16 px-6 md:px-12 max-w-7xl mx-auto scroll-mt-20">
-    <div class="mb-4 max-w-3xl reveal" >
+    <div class="mb-4 max-w-3xl reveal" data-reveal-id="about">
         <h2 class="font-host font-medium leading-tight">
             <span class="block text-sm md:text-base text-[#A8B0A9] mb-1">меня зовут</span>
             <span class="text-3xl sm:text-4xl md:text-5xl block">Алина Базарова&nbsp;—</span>
@@ -455,11 +475,11 @@ body {
     </div>
 
     <div class="max-w-4xl">
-        <div id="about-content" class="transition-all duration-500 reveal"   style="transition-delay: 100ms;">
+        <div id="about-content" class="transition-all duration-500 reveal" data-reveal-id="about"  style="transition-delay: 100ms;">
             <p class="text-sm md:text-base text-[#A8B0A9] max-w-2xl leading-relaxed">
                 человек, который с детства хотел стать русалкой или ведьмой, а стал...психологом. Практикую с 2021 г. Регулярно прохожу курсы повышения квалификации, посещаю супервизионные группы. Нахожусь в личной терапии. В работе использую интегративный подход в зависимости от запроса, но отдаю предпочтение юнгианско-ориентированной терапии. Работаю с запросами личных кризисов, проблем в личных отношениях, нестабильной самооценки, комплексов. Вы всегда можете написать мне по теме своего запроса, и я расскажу работаю ли я с Вашей темой или подскажу проверенного специалиста. Люблю мемы и фотографии котиков.
             </p>
-            <div id="education-toggle" class="cursor-pointer mt-6 inline-flex items-center justify-start gap-2 text-[#FEA6A6]/80 hover:text-[#FEA6A6] transition-colors group" tabindex="0"  >
+            <div id="education-toggle" class="cursor-pointer mt-6 inline-flex items-center justify-start gap-2 text-[#FEA6A6]/80 hover:text-[#FEA6A6] transition-colors group" tabindex="0" (keydown.enter)="toggleEducation()" (click)="toggleEducation()">
                 <span class="text-xs font-black uppercase tracking-widest">Образование и квалификация</span>
                 <svg class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
@@ -513,7 +533,7 @@ body {
 
 <!-- Articles -->
 <section id="articles" class="py-16 max-w-7xl mx-auto scroll-mt-20 overflow-hidden">
-  <div class="px-6 md:px-12 mb-6 reveal" >
+  <div class="px-6 md:px-12 mb-6 reveal" data-reveal-id="articles">
     <div class="max-w-3xl">
         <div class="inline-flex items-center gap-3 mb-6">
           <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
@@ -525,12 +545,12 @@ body {
     </div>
   </div>
 
-  <div class="relative reveal" >
-    <button id="scroll-left" class="flex absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-black/50 backdrop-blur-md rounded-full items-center justify-center text-[#EAEFEA]/60 hover:text-[#EAEFEA] hover:bg-black/80 transition-all disabled:opacity-20 disabled:cursor-not-allowed" disabled >
+  <div class="relative reveal" data-reveal-id="articles">
+    <button id="scroll-left" class="flex absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-black/50 backdrop-blur-md rounded-full items-center justify-center text-[#EAEFEA]/60 hover:text-[#EAEFEA] hover:bg-black/80 transition-all disabled:opacity-20 disabled:cursor-not-allowed" onclick="scrollArticles('-1')" >
         <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
     </button>
     
-    <div id="articles-scroll" class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory px-6 md:px-12" >
+    <div id="articles-scroll" class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory px-6 md:px-12" onscroll="checkScroll()">
         
         <a href="https://t.me/mtdbzr/41" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
             <div class="h-[280px] md:h-[340px] overflow-hidden">
@@ -540,7 +560,7 @@ body {
                 <h3 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors uppercase mb-3">Изнанка «милых» сновидений</h3>
                 <p class="text-sm md:text-base text-[#A8B0A9] mb-4 flex-grow overflow-hidden">Милый сон — лишь маска. Психика будит нас, когда цензура не справляется с опасным для Эго инсайтом</p>
                 <div class="mt-auto">
-                    <span class="inline-flex flex-col gap-0">
+                    <span class="inline-flex flex-col gap-1">
                         <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
                             Читать на канале
                             <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -559,7 +579,7 @@ body {
                 <h3 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors uppercase mb-3">Сказка как жизненный сценарий</h3>
                 <p class="text-sm md:text-base text-[#A8B0A9] mb-4 flex-grow overflow-hidden">Любимый сюжет детства — ваш тайный сценарий. Он выдает скрытые страхи и мешает двигаться вперед</p>
                 <div class="mt-auto">
-                    <span class="inline-flex flex-col gap-0">
+                    <span class="inline-flex flex-col gap-1">
                         <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
                             Читать на канале
                             <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -578,7 +598,7 @@ body {
                 <h3 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors uppercase mb-3">Диалог с Тенью</h3>
                 <p class="text-sm md:text-base text-[#A8B0A9] mb-4 flex-grow overflow-hidden">Забудьте сонники. Метод двух имен поможет услышать голос Тени и узнать скрытую правду о сновидении</p>
                 <div class="mt-auto">
-                    <span class="inline-flex flex-col gap-0">
+                    <span class="inline-flex flex-col gap-1">
                         <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
                             Читать на канале
                             <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -597,7 +617,7 @@ body {
                 <h3 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors uppercase mb-3">За пределами протокола</h3>
                 <p class="text-sm md:text-base text-[#A8B0A9] mb-4 flex-grow overflow-hidden">Психоанализ нужен там, где схемы бессильны. Это способ понять смысл боли, а не просто заглушить ее</p>
                 <div class="mt-auto">
-                    <span class="inline-flex flex-col gap-0">
+                    <span class="inline-flex flex-col gap-1">
                         <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
                             Читать на канале
                             <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
@@ -620,19 +640,15 @@ body {
         </div>
     </div>
     
-    <button id="scroll-right" class="flex absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-black/50 backdrop-blur-md rounded-full items-center justify-center text-[#EAEFEA]/60 hover:text-[#EAEFEA] hover:bg-black/80 transition-all disabled:opacity-20 disabled:cursor-not-allowed"  >
+    <button id="scroll-right" class="flex absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 md:w-14 md:h-14 bg-black/50 backdrop-blur-md rounded-full items-center justify-center text-[#EAEFEA]/60 hover:text-[#EAEFEA] hover:bg-black/80 transition-all disabled:opacity-20 disabled:cursor-not-allowed" onclick="scrollArticles('1')" >
         <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
     </button>
   </div>
 </section>
 
-<div class="max-w-7xl mx-auto px-6">
-    <div class="h-px w-full bg-white/10"></div>
-</div>
-
 <!-- Redesigned Services (Complete List) -->
 <section id="sessions" class="py-16 px-6 md:px-12 max-w-7xl mx-auto scroll-mt-20">
-  <div class="mb-6 max-w-2xl reveal" >
+  <div class="mb-6 max-w-2xl reveal" data-reveal-id="sessions">
     <div class="inline-flex items-center gap-3 mb-6">
       <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
       <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#7D857E]">Услуги</span>
@@ -644,7 +660,7 @@ body {
   
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
     
-    <div class="service-card reveal group cursor-pointer relative flex flex-col h-full bg-white/5 rounded-2xl overflow-hidden border border-white/5 hover:bg-white/10 transition-all duration-300"  tabindex="0"  >
+    <div class="service-card reveal group cursor-pointer relative flex flex-col h-full bg-white/5 rounded-2xl overflow-hidden border border-white/5 hover:bg-white/10 transition-all duration-300" data-reveal-id="sessions" tabindex="0" onkeydown="if(event.key==='Enter') toggleService('consulting')" onclick="toggleService('consulting')">
       
       
         <div class="relative w-full aspect-[4/3] overflow-hidden flex-shrink-0">
@@ -656,23 +672,23 @@ body {
         </div>
       
       
-      <div class="p-6 md:p-8 pt-3 md:pt-4 flex flex-col flex-grow">
+      <div class="p-6 md:p-8 flex flex-col flex-grow">
         
         <p class="text-sm md:text-base text-[#A8B0A9] mb-6 flex-grow leading-relaxed">На сессиях мы разбираем ваш конкретный запрос: что происходит, почему это происходит именно так и какие внутренние механизмы поддерживают проблему.</p>
         
-        <div class="mt-auto flex items-center justify-between gap-4">
-          <div class="flex-shrink-0 bg-[#FEA6A6] text-black px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-[#FEA6A6]/10 flex items-center justify-center h-[42px]">
+        <div class="mt-auto flex items-center justify-between">
+          <div class="bg-[#FEA6A6] text-black px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-[#FEA6A6]/10">
             Подробнее
           </div>
 
           
-            <div class="flex flex-col items-end justify-center gap-0.5 h-[42px]">
+            <div class="flex flex-col items-end gap-1">
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">60 минут</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">60 минут</span>
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">Видео созвон</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">Видео созвон</span>
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">Аудио сессия</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">Аудио сессия</span>
               
             </div>
           
@@ -680,7 +696,7 @@ body {
       </div>
     </div>
     
-    <div class="service-card reveal group cursor-pointer relative flex flex-col h-full bg-white/5 rounded-2xl overflow-hidden border border-white/5 hover:bg-white/10 transition-all duration-300"  tabindex="0"  >
+    <div class="service-card reveal group cursor-pointer relative flex flex-col h-full bg-white/5 rounded-2xl overflow-hidden border border-white/5 hover:bg-white/10 transition-all duration-300" data-reveal-id="sessions" tabindex="0" onkeydown="if(event.key==='Enter') toggleService('dreams')" onclick="toggleService('dreams')">
       
       
         <div class="relative w-full aspect-[4/3] overflow-hidden flex-shrink-0">
@@ -692,23 +708,23 @@ body {
         </div>
       
       
-      <div class="p-6 md:p-8 pt-3 md:pt-4 flex flex-col flex-grow">
+      <div class="p-6 md:p-8 flex flex-col flex-grow">
         
         <p class="text-sm md:text-base text-[#A8B0A9] mb-6 flex-grow leading-relaxed">Сны - один из самых прямых способов увидеть, что происходит в бессознательной части психики.</p>
         
-        <div class="mt-auto flex items-center justify-between gap-4">
-          <div class="flex-shrink-0 bg-[#FEA6A6] text-black px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-[#FEA6A6]/10 flex items-center justify-center h-[42px]">
+        <div class="mt-auto flex items-center justify-between">
+          <div class="bg-[#FEA6A6] text-black px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-[#FEA6A6]/10">
             Подробнее
           </div>
 
           
-            <div class="flex flex-col items-end justify-center gap-0.5 h-[42px]">
+            <div class="flex flex-col items-end gap-1">
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">60 минут</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">60 минут</span>
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">Видео сессия</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">Видео сессия</span>
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">Текстовой формат</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">Текстовой формат</span>
               
             </div>
           
@@ -716,7 +732,7 @@ body {
       </div>
     </div>
     
-    <div class="service-card reveal group cursor-pointer relative flex flex-col h-full bg-white/5 rounded-2xl overflow-hidden border border-white/5 hover:bg-white/10 transition-all duration-300"  tabindex="0"  >
+    <div class="service-card reveal group cursor-pointer relative flex flex-col h-full bg-white/5 rounded-2xl overflow-hidden border border-white/5 hover:bg-white/10 transition-all duration-300" data-reveal-id="sessions" tabindex="0" onkeydown="if(event.key==='Enter') toggleService('associations')" onclick="toggleService('associations')">
       
       
         <div class="relative w-full aspect-[4/3] overflow-hidden flex-shrink-0">
@@ -728,23 +744,23 @@ body {
         </div>
       
       
-      <div class="p-6 md:p-8 pt-3 md:pt-4 flex flex-col flex-grow">
+      <div class="p-6 md:p-8 flex flex-col flex-grow">
         
         <p class="text-sm md:text-base text-[#A8B0A9] mb-6 flex-grow leading-relaxed">Метод, который помогает быстро увидеть бессознательные установки и эмоциональные реакции, связанные с вашим запросом.</p>
         
-        <div class="mt-auto flex items-center justify-between gap-4">
-          <div class="flex-shrink-0 bg-[#FEA6A6] text-black px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-[#FEA6A6]/10 flex items-center justify-center h-[42px]">
+        <div class="mt-auto flex items-center justify-between">
+          <div class="bg-[#FEA6A6] text-black px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-[#FEA6A6]/10">
             Подробнее
           </div>
 
           
-            <div class="flex flex-col items-end justify-center gap-0.5 h-[42px]">
+            <div class="flex flex-col items-end gap-1">
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">60 минут</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">60 минут</span>
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">Текстовый формат</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">Текстовый формат</span>
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">Голосовые сообщения</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">Голосовые сообщения</span>
               
             </div>
           
@@ -752,7 +768,7 @@ body {
       </div>
     </div>
     
-    <div class="service-card reveal group cursor-pointer relative flex flex-col h-full bg-white/5 rounded-2xl overflow-hidden border border-white/5 hover:bg-white/10 transition-all duration-300"  tabindex="0"  >
+    <div class="service-card reveal group cursor-pointer relative flex flex-col h-full bg-white/5 rounded-2xl overflow-hidden border border-white/5 hover:bg-white/10 transition-all duration-300" data-reveal-id="sessions" tabindex="0" onkeydown="if(event.key==='Enter') toggleService('venting')" onclick="toggleService('venting')">
       
       
         <div class="relative w-full aspect-[4/3] overflow-hidden flex-shrink-0">
@@ -764,23 +780,23 @@ body {
         </div>
       
       
-      <div class="p-6 md:p-8 pt-3 md:pt-4 flex flex-col flex-grow">
+      <div class="p-6 md:p-8 flex flex-col flex-grow">
         
         <p class="text-sm md:text-base text-[#A8B0A9] mb-6 flex-grow leading-relaxed">Экстренная эмоциональная скорая помощь. Безопасное пространство, где можно выгрузить все, что накопилось.</p>
         
-        <div class="mt-auto flex items-center justify-between gap-4">
-          <div class="flex-shrink-0 bg-[#FEA6A6] text-black px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-[#FEA6A6]/10 flex items-center justify-center h-[42px]">
+        <div class="mt-auto flex items-center justify-between">
+          <div class="bg-[#FEA6A6] text-black px-8 py-2.5 rounded-full text-xs font-black uppercase tracking-widest hover:bg-white hover:scale-105 transition-all duration-300 shadow-lg shadow-[#FEA6A6]/10">
             Подробнее
           </div>
 
           
-            <div class="flex flex-col items-end justify-center gap-0.5 h-[42px]">
+            <div class="flex flex-col items-end gap-1">
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">60 минут</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">60 минут</span>
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">Видео сессия</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">Видео сессия</span>
               
-                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-tight">Голосовые сообщения</span>
+                <span class="font-mono text-[10px] uppercase text-[#7D857E] leading-none">Голосовые сообщения</span>
               
             </div>
           
@@ -791,13 +807,9 @@ body {
   </div>
 </section>
 
-<div class="max-w-7xl mx-auto px-6">
-    <div class="h-px w-full bg-white/10"></div>
-</div>
-
 <!-- FAQ -->
 <section id="faq" class="py-16 px-6 md:px-12 max-w-7xl mx-auto scroll-mt-20">
-  <div class="mb-6 max-w-2xl reveal" >
+  <div class="mb-6 max-w-2xl reveal" data-reveal-id="faq">
     <div class="inline-flex items-center gap-3 mb-6">
       <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
       <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#7D857E]">FAQ</span>
@@ -806,9 +818,9 @@ body {
       Ответы <span class="text-[#7D857E]">на вопросы</span>
     </h2>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start reveal delay-100" >
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start reveal delay-100" data-reveal-id="faq">
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 md:col-span-2"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 md:col-span-2" id="faq-process" tabindex="0" onkeydown="if(event.key==='Enter') toggleFaq('process')" onclick="toggleFaq('process')">
         <div class="flex items-center justify-between">
             <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как проходит работа?</h4>
             <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
@@ -853,7 +865,7 @@ body {
     </div>
 
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8" id="faq-sessions_count" tabindex="0" onkeydown="if(event.key==='Enter') toggleFaq('sessions_count')" onclick="toggleFaq('sessions_count')">
       <div class="flex items-center justify-between">
         <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Сколько нужно сессий?</h4>
         <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
@@ -865,7 +877,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8" id="faq-preparation" tabindex="0" onkeydown="if(event.key==='Enter') toggleFaq('preparation')" onclick="toggleFaq('preparation')">
       <div class="flex items-center justify-between">
         <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как подготовиться?</h4>
         <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
@@ -877,7 +889,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8" id="faq-couples" tabindex="0" onkeydown="if(event.key==='Enter') toggleFaq('couples')" onclick="toggleFaq('couples')">
       <div class="flex items-center justify-between">
         <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Работаете ли с парами?</h4>
         <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
@@ -889,7 +901,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8" id="faq-confidentiality" tabindex="0" onkeydown="if(event.key==='Enter') toggleFaq('confidentiality')" onclick="toggleFaq('confidentiality')">
       <div class="flex items-center justify-between">
         <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Конфиденциальность?</h4>
         <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
@@ -901,7 +913,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8" id="faq-friends" tabindex="0" onkeydown="if(event.key==='Enter') toggleFaq('friends')" onclick="toggleFaq('friends')">
       <div class="flex items-center justify-between">
         <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">А можно ли придет моя подруга?</h4>
         <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
@@ -913,7 +925,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8" id="faq-cancellation" tabindex="0" onkeydown="if(event.key==='Enter') toggleFaq('cancellation')" onclick="toggleFaq('cancellation')">
       <div class="flex items-center justify-between">
         <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Если я передумаю приходить на сессию?</h4>
         <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
@@ -925,12 +937,13 @@ body {
       </div>
     </div>
     
+
   </div>
 </section>
 
 <!-- Contact -->
 <section id="contact">
-  <div class="contact-card relative reveal overflow-hidden p-12 md:p-24 text-center flex flex-col items-center justify-center min-h-[70vh]" >
+  <div class="contact-card relative reveal overflow-hidden p-12 md:p-24 text-center flex flex-col items-center justify-center min-h-[70vh]" data-reveal-id="contact">
     <img src="img/end.jpg" class="absolute inset-0 w-full h-full object-cover grayscale" alt="Contact background image" referrerpolicy="no-referrer">
     <div class="absolute inset-0 bg-black/70"></div>
     <div class="relative z-10">
@@ -950,8 +963,7 @@ body {
 </section>
 
 <!-- Service Modal -->
-<!-- Modal Container -->
-<div id="modal-container"></div>
+
 
 <!-- Footer -->
 <footer class="bg-black py-16 px-6">
@@ -985,270 +997,188 @@ body {
   </filter>
 </svg>
 
-<script>
-    const faqs = [{"id":"sessions_count","question":"Сколько нужно сессий?","answer":"Количество сессий обговаривается индивидуально. При принятии решения о завершении терапии обязательно проводится заключительная сессия для подведения итогов работы."},{"id":"preparation","question":"Как подготовиться?","answer":"Специальной подготовки не требуется. На каждую сессию желательно иметь под рукой тетрадь (лист бумаги) и ручку – для записи инсайтов, а также стакан воды. О дополнительных инструментах (цветные карандаши, бОльшее количество бумаги) сообщаю заранее перед сессией."},{"id":"couples","question":"Работаете ли с парами?","answer":"На данный момент я не специализируюсь на групповой (семейной терапии), но могу порекомендовать Вам соответствующих специалистов."},{"id":"confidentiality","question":"Конфиденциальность?","answer":"Все, что вы приносите на сессию – остается только на сессии, за исключением полученной информации, которая может нанести вред Вам и окружающим. В случае, если случай не входит в пределы моей компетенции – я предложу Вам обратиться к соответствующим специалистам."},{"id":"friends","question":"А можно ли придет моя подруга?","answer":"В случае если я работаю с Вами, то не имею права быть психотерапевтом для близких Вам людей (муж/сестра/подруга), т.к. это может повлиять на оба процесса терапии."},{"id":"cancellation","question":"Если я передумаю приходить на сессию?","answer":"В случае продолжительной терапии переносы/отмена сессии производится не менее, чем за 24 часа до назначенной даты. В случае более поздней отмены – сессия оплачивается, но не производится. В случае «форсмажорной» отмены со стороны терапевта менее, чем за 24 часа – сессия переносится, а также следующая сессия будет бесплатной."}];
-    const services = [{"id":"consulting","title":"Психологическое консультирование","image":"img/sessions/1.jpg","description":"На сессиях мы разбираем ваш конкретный запрос: что происходит, почему это происходит именно так и какие внутренние механизмы поддерживают проблему.","icon":"<svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m9-10a4 4 0 100-8 4 4 0 000 8zm7-3a3 3 0 010 6M21 12a3 3 0 010 6\" /></svg>","tags":["Видео","Аудио"],"fullDescription":"В работе я использую методы разных направлений психологии с акцентом на психоаналитически ориентированный подход и работу с бессознательными процессами.\nКак показывает практика - самые важные ответы появляются не только в прямом разговоре, а в том материале, который обычно остается \"за кадром\": в сновидениях, оговорках, ассоциациях и спонтанных реакциях психики.\nИменно через этот материал часто становится понятно, что на самом деле происходит внутри.","reasonsTitle":"Сессии помогают:","reasons":["Разобраться в своей ситуации и реакциях.","Снизить тревогу и внутреннее напряжение.","Понять и разрешить внутренние конфликты.","Перестать повторять старые сценарии.","Найти более устойчивые способы реагирования на жизненные ситуации."],"formats":[{"name":"60 минут","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>"},{"name":"Видео созвон","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\"/></svg>"},{"name":"Аудио сессия","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z\"/></svg>"}],"multiPrice":true,"prices":[{"label":"Первая встреча","value":"1 522 ₽"},{"label":"Повторные сессии","value":"2 026 ₽"}]},{"id":"dreams","title":"Разбор сновидения","image":"img/sessions/2.jpg","description":"Сны - один из самых прямых способов увидеть, что происходит в бессознательной части психики.","icon":"<svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z\" /></svg>","tags":["Видео","Текст"],"fullDescription":"Иногда во сне повторяются одни и те же сюжеты. Иногда появляются тревожные или странные образы. Иногда сон цепляет так, что весь день не выходит из головы.\nРазбор сновидения помогает понять, какой внутренний конфликт или переживание стоит за этим сюжетом.\nРабота опирается на психоаналитический подход: мы разбираем символы сна, личные ассоциации и контекст вашей жизни, чтобы увидеть, какие процессы психики проявились в этом образе.","reasonsTitle":"Такой анализ может помочь:","reasons":["Понять, почему появляются повторяющиеся сны или кошмары.","Увидеть скрытые переживания и внутренние конфликты, которые трудно заметить в обычных размышлениях.","Лучше разобраться в сложной жизненной ситуации.","Лучше понять свою реакцию на происходящие события.","Прояснить, что именно в текущей ситуации вызывает напряжение."],"extraText":"Иногда один сон довольно точно показывает, что именно сейчас происходит внутри психики.","formats":[{"name":"60 минут","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>"},{"name":"Видео сессия","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\"/></svg>"},{"name":"Текстовой формат","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z\"/></svg>"}],"price":"3 044 ₽","multiPrice":false},{"id":"associations","title":"16 ассоциаций","image":"img/sessions/3.jpg","description":"Метод, который помогает быстро увидеть бессознательные установки и эмоциональные реакции, связанные с вашим запросом.","icon":"<svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z\" /></svg>","tags":["Бессознательное"],"fullDescription":"Вы называете тему (например: отношения, деньги, страх, решение, человек), после чего проходите короткую процедуру свободных ассоциаций. На основе цепочки ассоциаций становится видно, какие смыслы и переживания стоят за этим словом для вашей психики.\nЭто модификация классического психоаналитического метода свободных ассоциаций, который позволяет обойти рациональные объяснения и выйти на более глубокие мотивы.","reasonsTitle":"В результате вы получаете:","reasons":["Расшифровку вашей ассоциативной цепочки.","Понимание скрытых установок и эмоций, связанных с запросом.","Возможные источники внутреннего конфликта.","Точки, с которых можно начинать дальнейшую работу."],"extraText":"Метод особенно полезен, когда есть ощущение: сложно сформулировать проблему словами, но есть стойкое ощущение что что-то не так; хочется посмотреть на ситуацию с неожиданной стороны; нет возможности длительной терапии.","formats":[{"name":"60 минут","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>"},{"name":"Текстовый формат","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z\"/></svg>"},{"name":"Голосовые сообщения","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z\"/></svg>"}],"price":"2 511 ₽","multiPrice":false},{"id":"venting","title":"Небомбитуменя","image":"img/sessions/4.jpg","description":"Экстренная эмоциональная скорая помощь. Безопасное пространство, где можно выгрузить все, что накопилось.","icon":"<svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.99 7.99 0 0120 13a7.99 7.99 0 01-2.343 5.657z\" /></svg>","tags":["Видео","Аудио"],"fullDescription":"Иногда происходит ситуация, после которой внутри кипит все сразу: злость, обида, раздражение, желание написать длинное сообщение человеку, о котором вы потом пожалеете.\nВ такие моменты важно не запихивать эмоции обратно внутрь, где они обычно превращаются в тревогу, психосоматику или внезапные \"психи\" через неделю.\nЭтот формат - безопасное пространство, где можно выгрузить все, что накопилось, без анализа, морализаторства и попыток \"быстро вас исправить\".\nЯ слушаю, валидирую эмоции и помогаю снять накал, чтобы вы могли вернуться в более устойчивое состояние.","reasonsTitle":"Когда это особенно полезно:","reasons":["После сильного конфликта.","Когда \"накрыло\" эмоциями.","Когда нужно выговориться, прежде чем принимать решения.","Когда внутри слишком много напряжения."],"extraText":"Это не терапия и не разбор ситуации - это эмоциональная разгрузка, которая помогает не утащить накопившиеся чувства в бессознательное (чтобы оно не взяло реванш).","formats":[{"name":"60 минут","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>"},{"name":"Видео сессия","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\"/></svg>"},{"name":"Голосовые сообщения","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z\"/></svg>"}],"price":"1 733 ₽","multiPrice":false}];
-    
-    // Intersection Observer for reveal elements
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
+    <script>
+        const services = [{"id":"consulting","title":"Психологическое консультирование","image":"img/sessions/1.jpg","description":"На сессиях мы разбираем ваш конкретный запрос: что происходит, почему это происходит именно так и какие внутренние механизмы поддерживают проблему.","icon":"<svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m9-10a4 4 0 100-8 4 4 0 000 8zm7-3a3 3 0 010 6M21 12a3 3 0 010 6\" /></svg>","tags":["Видео","Аудио"],"fullDescription":"В работе я использую методы разных направлений психологии с акцентом на психоаналитически ориентированный подход и работу с бессознательными процессами.\nКак показывает практика - самые важные ответы появляются не только в прямом разговоре, а в том материале, который обычно остается \"за кадром\": в сновидениях, оговорках, ассоциациях и спонтанных реакциях психики.\nИменно через этот материал часто становится понятно, что на самом деле происходит внутри.","reasonsTitle":"Сессии помогают:","reasons":["Разобраться в своей ситуации и реакциях.","Снизить тревогу и внутреннее напряжение.","Понять и разрешить внутренние конфликты.","Перестать повторять старые сценарии.","Найти более устойчивые способы реагирования на жизненные ситуации."],"formats":[{"name":"60 минут","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>"},{"name":"Видео созвон","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\"/></svg>"},{"name":"Аудио сессия","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z\"/></svg>"}],"multiPrice":true,"prices":[{"label":"Первая встреча","value":"1 522 ₽"},{"label":"Повторные сессии","value":"2 026 ₽"}]},{"id":"dreams","title":"Разбор сновидения","image":"img/sessions/2.jpg","description":"Сны - один из самых прямых способов увидеть, что происходит в бессознательной части психики.","icon":"<svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z\" /></svg>","tags":["Видео","Текст"],"fullDescription":"Иногда во сне повторяются одни и те же сюжеты. Иногда появляются тревожные или странные образы. Иногда сон цепляет так, что весь день не выходит из головы.\nРазбор сновидения помогает понять, какой внутренний конфликт или переживание стоит за этим сюжетом.\nРабота опирается на психоаналитический подход: мы разбираем символы сна, личные ассоциации и контекст вашей жизни, чтобы увидеть, какие процессы психики проявились в этом образе.","reasonsTitle":"Такой анализ может помочь:","reasons":["Понять, почему появляются повторяющиеся сны или кошмары.","Увидеть скрытые переживания и внутренние конфликты, которые трудно заметить в обычных размышлениях.","Лучше разобраться в сложной жизненной ситуации.","Лучше понять свою реакцию на происходящие события.","Прояснить, что именно в текущей ситуации вызывает напряжение."],"extraText":"Иногда один сон довольно точно показывает, что именно сейчас происходит внутри психики.","formats":[{"name":"60 минут","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>"},{"name":"Видео сессия","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\"/></svg>"},{"name":"Текстовой формат","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z\"/></svg>"}],"price":"3 044 ₽","multiPrice":false},{"id":"associations","title":"16 ассоциаций","image":"img/sessions/3.jpg","description":"Метод, который помогает быстро увидеть бессознательные установки и эмоциональные реакции, связанные с вашим запросом.","icon":"<svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z\" /></svg>","tags":["Бессознательное"],"fullDescription":"Вы называете тему (например: отношения, деньги, страх, решение, человек), после чего проходите короткую процедуру свободных ассоциаций. На основе цепочки ассоциаций становится видно, какие смыслы и переживания стоят за этим словом для вашей психики.\nЭто модификация классического психоаналитического метода свободных ассоциаций, который позволяет обойти рациональные объяснения и выйти на более глубокие мотивы.","reasonsTitle":"В результате вы получаете:","reasons":["Расшифровку вашей ассоциативной цепочки.","Понимание скрытых установок и эмоций, связанных с запросом.","Возможные источники внутреннего конфликта.","Точки, с которых можно начинать дальнейшую работу."],"extraText":"Метод особенно полезен, когда есть ощущение: сложно сформулировать проблему словами, но есть стойкое ощущение что что-то не так; хочется посмотреть на ситуацию с неожиданной стороны; нет возможности длительной терапии.","formats":[{"name":"60 минут","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>"},{"name":"Текстовый формат","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z\"/></svg>"},{"name":"Голосовые сообщения","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z\"/></svg>"}],"price":"2 511 ₽","multiPrice":false},{"id":"venting","title":"Небомбитуменя","image":"img/sessions/4.jpg","description":"Экстренная эмоциональная скорая помощь. Безопасное пространство, где можно выгрузить все, что накопилось.","icon":"<svg class=\"w-8 h-8\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.99 7.99 0 0120 13a7.99 7.99 0 01-2.343 5.657z\" /></svg>","tags":["Видео","Аудио"],"fullDescription":"Иногда происходит ситуация, после которой внутри кипит все сразу: злость, обида, раздражение, желание написать длинное сообщение человеку, о котором вы потом пожалеете.\nВ такие моменты важно не запихивать эмоции обратно внутрь, где они обычно превращаются в тревогу, психосоматику или внезапные \"психи\" через неделю.\nЭтот формат - безопасное пространство, где можно выгрузить все, что накопилось, без анализа, морализаторства и попыток \"быстро вас исправить\".\nЯ слушаю, валидирую эмоции и помогаю снять накал, чтобы вы могли вернуться в более устойчивое состояние.","reasonsTitle":"Когда это особенно полезно:","reasons":["После сильного конфликта.","Когда \"накрыло\" эмоциями.","Когда нужно выговориться, прежде чем принимать решения.","Когда внутри слишком много напряжения."],"extraText":"Это не терапия и не разбор ситуации - это эмоциональная разгрузка, которая помогает не утащить накопившиеся чувства в бессознательное (чтобы оно не взяло реванш).","formats":[{"name":"60 минут","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z\"/></svg>"},{"name":"Видео сессия","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z\"/></svg>"},{"name":"Голосовые сообщения","icon":"<svg class=\"w-6 h-6\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"1.5\" d=\"M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z\"/></svg>"}],"price":"1 733 ₽","multiPrice":false}];
+        const faqs = [{"id":"sessions_count","question":"Сколько нужно сессий?","answer":"Количество сессий обговаривается индивидуально. При принятии решения о завершении терапии обязательно проводится заключительная сессия для подведения итогов работы."},{"id":"preparation","question":"Как подготовиться?","answer":"Специальной подготовки не требуется. На каждую сессию желательно иметь под рукой тетрадь (лист бумаги) и ручку – для записи инсайтов, а также стакан воды. О дополнительных инструментах (цветные карандаши, бОльшее количество бумаги) сообщаю заранее перед сессией."},{"id":"couples","question":"Работаете ли с парами?","answer":"На данный момент я не специализируюсь на групповой (семейной терапии), но могу порекомендовать Вам соответствующих специалистов."},{"id":"confidentiality","question":"Конфиденциальность?","answer":"Все, что вы приносите на сессию – остается только на сессии, за исключением полученной информации, которая может нанести вред Вам и окружающим. В случае, если случай не входит в пределы моей компетенции – я предложу Вам обратиться к соответствующим специалистам."},{"id":"friends","question":"А можно ли придет моя подруга?","answer":"В случае если я работаю с Вами, то не имею права быть психотерапевтом для близких Вам людей (муж/сестра/подруга), т.к. это может повлиять на оба процесса терапии."},{"id":"cancellation","question":"Если я передумаю приходить на сессию?","answer":"В случае продолжительной терапии переносы/отмена сессии производится не менее, чем за 24 часа до назначенной даты. В случае более поздней отмены – сессия оплачивается, но не производится. В случае «форсмажорной» отмены со стороны терапевта менее, чем за 24 часа – сессия переносится, а также следующая сессия будет бесплатной."}];
+        let isMenuOpen = false;
+        
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('menu-overlay');
+            const line1 = document.getElementById('line1');
+            const line2 = document.getElementById('line2');
+            const line3 = document.getElementById('line3');
+            
+            if (isMenuOpen) {
+                menu.classList.add('active');
+                overlay.classList.remove('hidden', 'opacity-0');
+                overlay.classList.add('opacity-100');
+                line1.classList.add('rotate-45', 'translate-y-2');
+                line2.classList.add('opacity-0');
+                line3.classList.add('-rotate-45', '-translate-y-2');
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.remove('active');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 400);
+                line1.classList.remove('rotate-45', 'translate-y-2');
+                line2.classList.remove('opacity-0');
+                line3.classList.remove('-rotate-45', '-translate-y-2');
+                document.body.style.overflow = '';
             }
-        });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // Glow effect
-    window.addEventListener('scroll', handleGlowEffect);
-    window.addEventListener('resize', handleGlowEffect);
-    
-    function handleGlowEffect() {
-        const glowElement = document.querySelector('.background-glow');
-        const heroSection = document.querySelector('#hero');
-        if (!glowElement || !heroSection) return;
-
-        const scrollY = window.scrollY;
-        const heroHeight = heroSection.offsetHeight;
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-        if (scrollY < heroHeight * 0.8) {
-            glowElement.style.opacity = '0';
-        } else {
-            glowElement.style.opacity = '1';
         }
         
-        const scrollAfterHero = Math.max(0, scrollY - heroHeight);
-        const scrollableHeightAfterHero = docHeight - heroHeight;
-        const scrollPercent = scrollableHeightAfterHero > 0 ? scrollAfterHero / scrollableHeightAfterHero : 0;
-
-        const xOffset = -50 * scrollPercent;
-        const yOffset = -60 * scrollPercent;
-
-        glowElement.style.setProperty('--glow-x', `${xOffset}vw`);
-        glowElement.style.setProperty('--glow-y', `${yOffset}vh`);
-    }
-    
-    // Menu toggle
-    let isMenuOpen = false;
-    function toggleMenu() {
-        isMenuOpen = !isMenuOpen;
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuOverlay = document.getElementById('menu-overlay');
-        const line1 = document.getElementById('line1');
-        const line2 = document.getElementById('line2');
-        const line3 = document.getElementById('line3');
+        function toggleFaq(id) {
+            const items = document.querySelectorAll('.faq-item');
+            items.forEach(item => {
+                if (item.id === 'faq-' + id) item.classList.toggle('active');
+                else item.classList.remove('active');
+            });
+        }
         
-        if (isMenuOpen) {
-            mobileMenu.classList.add('active');
-            menuOverlay.classList.remove('hidden', 'opacity-0');
-            menuOverlay.classList.add('opacity-100');
-            line1.classList.add('rotate-45', 'translate-y-2');
-            line2.classList.add('opacity-0');
-            line3.classList.add('-rotate-45', '-translate-y-2');
+        function toggleService(id) {
+            const service = services.find(s => s.id === id);
+            if (!service) return;
+            const container = document.getElementById('service-modal-container');
+            const content = document.getElementById('service-modal-content');
+            
+            let formatsHtml = service.formats ? `
+                <div class="mb-8">
+                  <div class="inline-flex items-center gap-3 mb-6">
+                    <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
+                    <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#EAEFEA]">${service.formatsTitle || 'Форматы работы:'}</span>
+                  </div>
+                  <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${service.formats.map(f => `
+                      <div class="bg-white/5 p-4 rounded-xl flex items-center gap-3">
+                        <div class="text-[#FEA6A6] flex-shrink-0">${f.icon}</div>
+                        <h4 class="text-[#A8B0A9] text-sm md:text-base">${f.name}</h4>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>` : '';
+            
+            let reasonsHtml = service.reasons ? `
+                <div class="mb-8">
+                  <div class="inline-flex items-center gap-3 mb-6">
+                    <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
+                    <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#EAEFEA]">${service.reasonsTitle || 'Зачем:'}</span>
+                  </div>
+                  <ul class="space-y-4">
+                    ${service.reasons.map(r => `<li><p class="text-sm md:text-base text-[#A8B0A9]">${r}</p></li>`).join('')}
+                  </ul>
+                </div>` : '';
+            
+            let priceHtml = !service.multiPrice ? `
+                  <div class="flex justify-between items-center gap-8">
+                    <p class="text-xs uppercase text-[#7D857E] font-bold">Стоимость</p>
+                    <p class="text-xl font-host font-bold text-[#EAEFEA]">${service.price}</p>
+                  </div>` : `<div class="space-y-3">${service.prices.map(p => `
+                      <div class="flex justify-between items-center gap-8">
+                        <p class="text-xs uppercase text-[#7D857E] font-bold">${p.label}</p>
+                        <p class="text-xl font-host font-bold text-[#EAEFEA]">${p.value}</p>
+                      </div>`).join('')}</div>`;
+            
+            content.innerHTML = `
+                <div class="animate-in fade-in zoom-in-95 duration-300 relative flex flex-col h-full">
+                  <button class="absolute top-4 right-4 md:top-6 md:right-6 text-[#FEA6A6] hover:text-white transition-colors z-20 bg-black/50 rounded-full p-2 backdrop-blur-md" onclick="closeServiceModal()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                  </button>
+                  <div class="overflow-y-auto no-scrollbar flex flex-col flex-grow rounded-2xl">
+                    ${service.image ? `
+                      <div class="relative w-full aspect-[4/3] flex-shrink-0">
+                        <img src="${service.image}" alt="${service.title}" class="absolute inset-0 w-full h-full object-cover" referrerpolicy="no-referrer">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] via-[#0F0F0F]/40 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 w-full p-8 md:p-12 pb-6">
+                          <h3 class="text-2xl md:text-3xl lg:text-4xl font-host font-medium text-[#EAEFEA] uppercase break-words">${service.title}</h3>
+                        </div>
+                      </div>` : ''}
+                    <div class="p-8 md:p-12 flex-grow ${service.image ? 'pt-2' : ''}">
+                      ${!service.image ? `<h3 class="text-2xl md:text-3xl lg:text-4xl font-host font-medium text-[#EAEFEA] mb-6 uppercase text-center mt-8 md:mt-0 break-words">${service.title}</h3>` : ''}
+                      <div class="prose prose-invert max-w-none">
+                        <p class="text-sm md:text-base text-[#A8B0A9] mb-8 leading-relaxed whitespace-pre-wrap">${service.fullDescription || service.description}</p>
+                        ${reasonsHtml}
+                        ${formatsHtml}
+                        ${service.extraText ? `<p class="text-sm md:text-base text-[#A8B0A9] mb-8 leading-relaxed whitespace-pre-wrap">${service.extraText}</p>` : ''}
+                      </div>
+                    </div>
+                    <div class="bg-white/5 p-8 md:p-12 mt-auto">
+                      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div class="w-full md:w-auto">${priceHtml}</div>
+                        <a href="https://t.me/nortlin" target="_blank" class="w-full md:w-auto flex-shrink-0 px-10 py-4 rounded-full bg-[#FEA6A6] text-black font-bold text-sm uppercase tracking-widest hover:scale-105 transition-transform text-center">Записаться</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>`;
+            container.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
-        } else {
-            mobileMenu.classList.remove('active');
-            menuOverlay.classList.remove('opacity-100');
-            menuOverlay.classList.add('opacity-0');
-            setTimeout(() => menuOverlay.classList.add('hidden'), 300);
-            line1.classList.remove('rotate-45', 'translate-y-2');
-            line2.classList.remove('opacity-0');
-            line3.classList.remove('-rotate-45', '-translate-y-2');
+        }
+        
+        function closeServiceModal() {
+            document.getElementById('service-modal-container').classList.add('hidden');
             document.body.style.overflow = '';
         }
-    }
-    
-    document.getElementById('menu-toggle').addEventListener('click', toggleMenu);
-    document.getElementById('menu-overlay').addEventListener('click', toggleMenu);
-    document.querySelectorAll('.mobile-link').forEach(link => link.addEventListener('click', toggleMenu));
-
-    // Education toggle
-    let isEducationExpanded = false;
-    function toggleEducation() {
-        isEducationExpanded = !isEducationExpanded;
-        const aboutContent = document.getElementById('about-content');
-        if (isEducationExpanded) {
-            aboutContent.classList.add('expanded');
-        } else {
-            aboutContent.classList.remove('expanded');
+        
+        function scrollArticles(direction) {
+            const scrollContainer = document.getElementById('articles-scroll');
+            const cardWidth = scrollContainer.querySelector('.article-card').offsetWidth + 24;
+            scrollContainer.scrollBy({ left: cardWidth * direction, behavior: 'smooth' });
         }
-    }
-    document.getElementById('education-toggle').addEventListener('click', toggleEducation);
-
-    // FAQ toggle
-    let expandedFaq = null;
-    function toggleFaq(id) {
-        expandedFaq = expandedFaq === id ? null : id;
-        document.querySelectorAll('.faq-item').forEach(item => {
-            if (item.getAttribute('data-faq-id') === expandedFaq) {
-                item.classList.add('active');
+        
+        function checkScroll() {
+            const scrollContainer = document.getElementById('articles-scroll');
+            if (!scrollContainer) return;
+            const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
+            const leftBtn = document.getElementById('scroll-left');
+            const rightBtn = document.getElementById('scroll-right');
+            if (leftBtn) leftBtn.disabled = scrollContainer.scrollLeft <= 1;
+            if (rightBtn) rightBtn.disabled = scrollContainer.scrollLeft >= maxScrollLeft - 1;
+        }
+        
+        function handleGlowEffect() {
+            const glowElement = document.querySelector('.background-glow');
+            const heroSection = document.querySelector('#hero');
+            if (!glowElement || !heroSection) return;
+            const scrollY = window.scrollY;
+            const heroHeight = heroSection.offsetHeight;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            glowElement.style.opacity = scrollY < heroHeight * 0.8 ? '0' : '1';
+            const scrollPercent = Math.max(0, scrollY - heroHeight) / (docHeight - heroHeight || 1);
+            glowElement.style.setProperty('--glow-x', `${-50 * scrollPercent}vw`);
+            glowElement.style.setProperty('--glow-y', `${-60 * scrollPercent}vh`);
+        }
+        
+        window.addEventListener('scroll', handleGlowEffect);
+        window.addEventListener('resize', handleGlowEffect);
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+                nav.classList.remove('not-scrolled');
             } else {
-                item.classList.remove('active');
+                nav.classList.remove('scrolled');
+                nav.classList.add('not-scrolled');
             }
         });
-    }
-    
-    // Add data-faq-id to faq items
-    document.querySelectorAll('.faq-item').forEach((item, index) => {
-        // The first one is 'process', others are from the array
-        const id = index === 0 ? 'process' : faqs[index-1].id;
-        item.setAttribute('data-faq-id', id);
-        item.addEventListener('click', () => toggleFaq(id));
-    });
-
-    // Articles scroll
-    function scrollArticles(direction) {
-        const scrollContainer = document.getElementById('articles-scroll');
-        const firstCard = scrollContainer.querySelector('.article-card');
-        if (!scrollContainer || !firstCard) return;
-        const cardWidth = firstCard.offsetWidth + 24;
-        scrollContainer.scrollBy({ left: cardWidth * direction, behavior: 'smooth' });
-    }
-    document.getElementById('scroll-left').addEventListener('click', () => scrollArticles(-1));
-    document.getElementById('scroll-right').addEventListener('click', () => scrollArticles(1));
-
-    function checkScroll() {
-        const scrollContainer = document.getElementById('articles-scroll');
-        const scrollLeftBtn = document.getElementById('scroll-left');
-        const scrollRightBtn = document.getElementById('scroll-right');
-        if (!scrollContainer) return;
         
-        const maxScrollLeft = scrollContainer.scrollWidth - scrollContainer.clientWidth;
-        scrollLeftBtn.disabled = scrollContainer.scrollLeft <= 1;
-        scrollRightBtn.disabled = scrollContainer.scrollLeft >= maxScrollLeft - 1;
-        
-        if (scrollLeftBtn.disabled) scrollLeftBtn.classList.add('opacity-20', 'cursor-not-allowed');
-        else scrollLeftBtn.classList.remove('opacity-20', 'cursor-not-allowed');
-        
-        if (scrollRightBtn.disabled) scrollRightBtn.classList.add('opacity-20', 'cursor-not-allowed');
-        else scrollRightBtn.classList.remove('opacity-20', 'cursor-not-allowed');
-    }
-    document.getElementById('articles-scroll').addEventListener('scroll', checkScroll);
-    setTimeout(checkScroll, 100);
-
-    // Service Modal
-    function toggleService(id) {
-        const service = services.find(s => s.id === id);
-        if (!service) return;
-        
-        let formatsHtml = '';
-        if (service.formats && service.formats.length > 0) {
-            formatsHtml = `
-            <div class="mb-8">
-              <div class="inline-flex items-center gap-3 mb-6">
-                <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
-                <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#EAEFEA]">Форматы работы:</span>
-              </div>
-              <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                ${service.formats.map(format => `
-                  <div class="bg-white/5 p-4 rounded-xl flex items-center gap-3">
-                    <div class="text-[#FEA6A6] flex-shrink-0">${format.icon}</div>
-                    <h4 class="text-[#A8B0A9] text-sm md:text-base">${format.name}</h4>
-                  </div>
-                `).join('')}
-              </div>
-            </div>`;
-        }
-
-        let priceHtml = '';
-        if (!service.multiPrice) {
-            priceHtml = `
-              <div class="flex justify-between items-center gap-8">
-                <p class="text-xs uppercase text-[#7D857E] font-bold">Стоимость</p>
-                <p class="text-xl font-host font-bold text-[#EAEFEA]">${service.price}</p>
-              </div>`;
-        } else {
-            priceHtml = `
-              <div class="space-y-3">
-                ${service.prices.map(priceItem => `
-                  <div class="flex justify-between items-center gap-8">
-                    <p class="text-xs uppercase text-[#7D857E] font-bold">${priceItem.label}</p>
-                    <p class="text-xl font-host font-bold text-[#EAEFEA]">${priceItem.value}</p>
-                  </div>
-                `).join('')}
-              </div>`;
-        }
-
-        const modalHtml = `
-        <div class="fixed inset-0 z-[200] flex items-center justify-center px-4 py-6 md:p-12" id="service-modal">
-          <div class="absolute inset-0 bg-[#0F0F0F]/30 backdrop-blur-lg transition-opacity" onclick="closeServiceModal()"></div>
-          <div class="relative bg-[#0F0F0F] rounded-2xl w-full max-w-3xl max-h-full shadow-2xl flex flex-col animate-in fade-in zoom-in-95 duration-300 overflow-hidden">
-            <button class="absolute top-4 right-4 md:top-6 md:right-6 text-[#FEA6A6] hover:text-white transition-colors z-20 bg-black/50 rounded-full p-2 backdrop-blur-md" onclick="closeServiceModal()">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            checkScroll();
+            handleGlowEffect();
             
-            <div class="overflow-y-auto no-scrollbar flex flex-col flex-grow rounded-2xl">
-              ${service.image ? `
-                <div class="relative w-full aspect-[4/3] flex-shrink-0">
-                  <img src="${service.image}" alt="${service.title}" class="absolute inset-0 w-full h-full object-cover" referrerpolicy="no-referrer">
-                  <div class="absolute inset-0 bg-gradient-to-t from-[#0F0F0F] via-[#0F0F0F]/40 to-transparent"></div>
-                  <div class="absolute bottom-0 left-0 w-full p-8 md:p-12 pb-6 text-center">
-                    <h3 class="text-2xl md:text-3xl lg:text-4xl font-host font-medium text-[#EAEFEA] uppercase break-words">${service.title}</h3>
-                  </div>
-                </div>
-              ` : ''}
-              
-              <div class="p-8 md:p-12 flex-grow ${service.image ? 'pt-2' : ''}">
-                ${!service.image ? `
-                  <h3 class="text-2xl md:text-3xl lg:text-4xl font-host font-medium text-[#EAEFEA] mb-6 uppercase text-center mt-8 md:mt-0 break-words">${service.title}</h3>
-                ` : ''}
-                
-                <div class="prose prose-invert max-w-none">
-                  <p class="text-sm md:text-base text-[#A8B0A9] mb-8 leading-relaxed whitespace-pre-wrap">${service.fullDescription || service.description}</p>
-                  
-                  ${service.reasons && service.reasons.length > 0 ? `
-                    <div class="mb-8">
-                      <div class="inline-flex items-center gap-3 mb-6">
-                        <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
-                        <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#EAEFEA]">${service.reasonsTitle || 'Зачем:'}</span>
-                      </div>
-                      <ul class="space-y-4">
-                        ${service.reasons.map(reason => `
-                          <li><p class="text-sm md:text-base text-[#A8B0A9]">${reason}</p></li>
-                        `).join('')}
-                      </ul>
-                    </div>
-                  ` : ''}
-
-                  ${formatsHtml}
-                  
-                  ${service.extraText ? `
-                    <p class="text-sm md:text-base text-[#A8B0A9] mb-8 leading-relaxed whitespace-pre-wrap">${service.extraText}</p>
-                  ` : ''}
-                </div>
-              </div>
-              
-              <div class="bg-white/5 p-8 md:p-12 mt-auto">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-8">
-                  <div class="w-full md:w-auto">
-                    ${priceHtml}
-                  </div>
-                  <a href="https://t.me/nortlin" target="_blank" class="w-full md:w-auto flex-shrink-0 px-10 py-4 rounded-full bg-[#FEA6A6] text-black font-bold text-sm uppercase tracking-widest hover:scale-105 transition-transform text-center">Записаться</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        `;
-        
-        document.getElementById('modal-container').innerHTML = modalHtml;
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeServiceModal() {
-        document.getElementById('modal-container').innerHTML = '';
-        document.body.style.overflow = '';
-    }
-    
-    // Add click listeners to service cards
-    document.querySelectorAll('.service-card').forEach((card, index) => {
-        card.addEventListener('click', () => toggleService(services[index].id));
-    });
-
-    // Initial glow effect setup
-    handleGlowEffect();
-</script>
+            // Initial nav state
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.add('not-scrolled');
+        });
+    </script>
 </body>
 </html>
