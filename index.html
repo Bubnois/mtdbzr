@@ -128,24 +128,29 @@ body {
 .about-image-wrapper,
 .service-icon-bg,
 .price-block,
-.contact-image-wrapper,
-.faq-item {
+.contact-image-wrapper {
     border-radius: 0.5rem; /* default: rounded-lg */
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-radius 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.service-card:hover,
-.article-card:hover,
-.process-card:hover,
-.faq-item:hover, .faq-item.active {
-    border-radius: 2rem; /* Increased rounding */
+.faq-item {
+    scroll-margin-top: 100px;
 }
 
 .service-card:hover,
 .article-card:hover,
-.process-card:hover,
-.faq-item:hover {
+.process-card:hover {
+    border-radius: 2rem; /* Increased rounding */
+}
+
+.service-card:hover,
+.process-card:hover {
   transform: translateY(-8px);
+}
+
+.service-card:hover,
+.article-card:hover,
+.process-card:hover {
   background-color: rgba(255, 255, 255, 0.06);
 }
 
@@ -164,9 +169,6 @@ body {
   opacity: 0;
   transition: max-height 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease;
 }
-.faq-item.active {
-  background: rgba(255, 255, 255, 0.08);
-}
 .faq-item.active .faq-answer {
   max-height: 1200px; /* Increased max-height for timeline */
   opacity: 1;
@@ -176,21 +178,34 @@ body {
   color: #FEA6A6;
 }
 
-/* Education Dropdown */
-.education-details {
-  max-height: 0;
+/* Education Section Styles */
+.education-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .education-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.education-plate {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 0.6rem 1rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  position: relative;
   overflow: hidden;
-  transition: max-height 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.4s ease, margin-top 0.6s ease;
-  opacity: 0;
-  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 80px;
 }
-#about-content.expanded .education-details {
-  max-height: 600px;
-  opacity: 1;
-  margin-top: 1.5rem; /* mt-6 */
-}
-#about-content.expanded #education-toggle svg {
-  transform: rotate(180deg);
+
+.education-plate:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
 }
 
 /* Process Timeline Styles */
@@ -459,49 +474,52 @@ body {
             <p class="text-sm md:text-base text-[#A8B0A9] max-w-2xl leading-relaxed">
                 человек, который с детства хотел стать русалкой или ведьмой, а стал...психологом. Практикую с 2021 г. Регулярно прохожу курсы повышения квалификации, посещаю супервизионные группы. Нахожусь в личной терапии. В работе использую интегративный подход в зависимости от запроса, но отдаю предпочтение юнгианско-ориентированной терапии. Работаю с запросами личных кризисов, проблем в личных отношениях, нестабильной самооценки, комплексов. Вы всегда можете написать мне по теме своего запроса, и я расскажу работаю ли я с Вашей темой или подскажу проверенного специалиста. Люблю мемы и фотографии котиков.
             </p>
-            <div id="education-toggle" class="cursor-pointer mt-6 inline-flex items-center justify-start gap-2 text-[#FEA6A6]/80 hover:text-[#FEA6A6] transition-colors group" tabindex="0"  >
-                <span class="text-xs font-black uppercase tracking-widest">Образование и квалификация</span>
-                <svg class="w-4 h-4 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            <div class="mt-10 mb-2">
+                <div class="inline-flex items-center gap-3 mb-4">
+                    <div class="w-2 h-2 rounded-full bg-[#FEA6A6]"></div>
+                    <span class="text-xs uppercase tracking-[0.2em] font-semibold text-[#7D857E]">Образование и квалификация</span>
+                </div>
             </div>
             
-            <div class="education-details">
-                <ul class="list-none grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                     <li class="flex items-start gap-4">
-                        <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                        <div>
-                            <h4 class="font-bold text-[#EAEFEA]">Базовое психологическое образование</h4>
-                            <p class="text-sm text-[#A8B0A9]">ОмГПУ, 2021 г.</p>
-                        </div>
-                    </li>
-                     <li class="flex items-start gap-4">
-                        <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                        <div>
-                            <h4 class="font-bold text-[#EAEFEA]">Когнитивно-бихевиоральные технологии</h4>
-                            <p class="text-sm text-[#A8B0A9]">МИП, 2025 г.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-4">
-                        <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                        <div>
-                            <h4 class="font-bold text-[#EAEFEA]">Терапевтическое использование сновидений</h4>
-                            <p class="text-sm text-[#A8B0A9]">МИП, 2025 г.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-4">
-                        <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                        <div>
-                            <h4 class="font-bold text-[#EAEFEA]">Клиническая психология</h4>
-                            <p class="text-sm text-[#A8B0A9]">МИП, 2025 - по н.вр.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-4">
-                        <svg class="w-5 h-5 text-[#FEA6A6] flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                        <div>
-                            <h4 class="font-bold text-[#EAEFEA]">Юнгианский анализ</h4>
-                            <p class="text-sm text-[#A8B0A9]">МААП, 2025 - по н.вр.</p>
-                        </div>
-                    </li>
-                </ul>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+                <!-- First 3 items: 1 column on mobile (col-span-2), 1 column on desktop (md:col-span-1) -->
+                <div class="education-plate col-span-2 md:col-span-1">
+                    <div class="relative z-10">
+                        <h4 class="font-bold text-[#EAEFEA] text-base md:text-lg mb-1">Базовое психологическое образование</h4>
+                        <p class="text-sm md:text-base text-[#A8B0A9]">ОмГПУ, 2021 г.</p>
+                    </div>
+                    <svg class="absolute -right-4 -bottom-4 w-24 h-24 text-gray-500 opacity-5 transform rotate-12 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <div class="education-plate col-span-2 md:col-span-1">
+                    <div class="relative z-10">
+                        <h4 class="font-bold text-[#EAEFEA] text-base md:text-lg mb-1">Когнитивно-бихевиоральные технологии</h4>
+                        <p class="text-sm md:text-base text-[#A8B0A9]">МИП, 2025 г.</p>
+                    </div>
+                    <svg class="absolute -left-4 -top-4 w-24 h-24 text-gray-500 opacity-5 transform -rotate-12 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <div class="education-plate col-span-2 md:col-span-1">
+                    <div class="relative z-10">
+                        <h4 class="font-bold text-[#EAEFEA] text-base md:text-lg mb-1">Терапевтическое использование сновидений</h4>
+                        <p class="text-sm md:text-base text-[#A8B0A9]">МИП, 2025 г.</p>
+                    </div>
+                    <svg class="absolute -right-6 top-0 w-24 h-24 text-gray-500 opacity-5 transform rotate-45 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                
+                <!-- Last 2 items: 2 columns on mobile (col-span-1) and desktop (md:col-span-1) -->
+                <div class="education-plate col-span-1">
+                    <div class="relative z-10">
+                        <h4 class="font-bold text-[#EAEFEA] text-base md:text-lg mb-1">Клиническая психология</h4>
+                        <p class="text-sm md:text-base text-[#A8B0A9]">МИП, 2025 - по н.вр.</p>
+                    </div>
+                    <svg class="absolute -left-4 -bottom-4 w-24 h-24 text-gray-500 opacity-5 transform -rotate-45 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
+                <div class="education-plate col-span-1">
+                    <div class="relative z-10">
+                        <h4 class="font-bold text-[#EAEFEA] text-base md:text-lg mb-1">Юнгианский анализ</h4>
+                        <p class="text-sm md:text-base text-[#A8B0A9]">МААП, 2025 - по н.вр.</p>
+                    </div>
+                    <svg class="absolute left-1/2 -bottom-8 w-24 h-24 text-gray-500 opacity-5 transform -translate-x-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                </div>
             </div>
         </div>
     </div>
@@ -535,7 +553,7 @@ body {
     
     <div id="articles-scroll" class="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory px-6 md:px-12" >
         
-        <a href="https://t.me/mtdbzr/55" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
+        <a href="https://t.me/mtdbzr/55" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all duration-300">
             <div class="h-[280px] md:h-[340px] overflow-hidden">
                 <img src="img/articles/1.jpg" alt="Если вам снится школа, то дело не в школе" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105" referrerpolicy="no-referrer">
             </div>
@@ -545,7 +563,7 @@ body {
                     <span class="inline-flex flex-col gap-0">
                         <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
                             Читать на канале
-                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
                         </span>
                         <span class="font-mono text-[10px] md:text-xs text-[#A8B0A9] opacity-60">t.me/mtdbzr/55</span>
                     </span>
@@ -553,7 +571,7 @@ body {
             </div>
         </a>
 
-        <a href="https://t.me/mtdbzr/35" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
+        <a href="https://t.me/mtdbzr/35" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all duration-300">
             <div class="h-[280px] md:h-[340px] overflow-hidden">
                 <img src="img/articles/2.jpg" alt="Почему вы хотите одновременно уволиться, стать успешным и просто исчезнуть" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105" referrerpolicy="no-referrer">
             </div>
@@ -563,7 +581,7 @@ body {
                     <span class="inline-flex flex-col gap-0">
                         <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
                             Читать на канале
-                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
                         </span>
                         <span class="font-mono text-[10px] md:text-xs text-[#A8B0A9] opacity-60">t.me/mtdbzr/35</span>
                     </span>
@@ -571,7 +589,7 @@ body {
             </div>
         </a>
 
-        <a href="https://t.me/mtdbzr/41" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
+        <a href="https://t.me/mtdbzr/41" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all duration-300">
             <div class="h-[280px] md:h-[340px] overflow-hidden">
                 <img src="img/articles/3.jpg" alt="Почему самый «милый» сон иногда оказывается самым неприятным" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105" referrerpolicy="no-referrer">
             </div>
@@ -581,7 +599,7 @@ body {
                     <span class="inline-flex flex-col gap-0">
                         <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
                             Читать на канале
-                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
                         </span>
                         <span class="font-mono text-[10px] md:text-xs text-[#A8B0A9] opacity-60">t.me/mtdbzr/41</span>
                     </span>
@@ -589,7 +607,7 @@ body {
             </div>
         </a>
 
-        <a href="https://t.me/mtdbzr/46" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
+        <a href="https://t.me/mtdbzr/46" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all duration-300">
             <div class="h-[280px] md:h-[340px] overflow-hidden">
                 <img src="img/articles/4.jpg" alt="Как правильно вести дневник сновидений и что это даёт" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105" referrerpolicy="no-referrer">
             </div>
@@ -599,7 +617,7 @@ body {
                     <span class="inline-flex flex-col gap-0">
                         <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
                             Читать на канале
-                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
                         </span>
                         <span class="font-mono text-[10px] md:text-xs text-[#A8B0A9] opacity-60">t.me/mtdbzr/46</span>
                     </span>
@@ -607,7 +625,7 @@ body {
             </div>
         </a>
 
-        <a href="https://t.me/mtdbzr/40" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5">
+        <a href="https://t.me/mtdbzr/40" target="_blank" class="article-card flex flex-col flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-white/5 rounded-2xl border border-white/5 hover:bg-white/10 transition-all duration-300">
             <div class="h-[280px] md:h-[340px] overflow-hidden">
                 <img src="img/articles/5.jpg" alt="Как любимая сказка детства может раскрыть ваш жизненный сценарий" class="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105" referrerpolicy="no-referrer">
             </div>
@@ -617,7 +635,7 @@ body {
                     <span class="inline-flex flex-col gap-0">
                         <span class="inline-flex items-center gap-2 text-sm md:text-base font-bold text-[#FEA6A6]">
                             Читать на канале
-                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            <svg class="w-4 h-4 transition-transform group-hover/card:translate-x-1 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
                         </span>
                         <span class="font-mono text-[10px] md:text-xs text-[#A8B0A9] opacity-60">t.me/mtdbzr/40</span>
                     </span>
@@ -625,7 +643,7 @@ body {
             </div>
         </a>
         
-        <div class="article-card flex flex-col justify-center items-center text-center flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-[#0F0F0F] p-8">
+        <div class="article-card flex flex-col justify-center items-center text-center flex-shrink-0 w-[280px] md:w-[340px] snap-start group/card overflow-hidden bg-[#0F0F0F] p-8 rounded-2xl border border-white/5 hover:bg-white/10 transition-all duration-300">
             <div class="relative z-10">
                 <p class="text-sm md:text-base font-medium mb-8 text-[#A8B0A9]">На канале я регулярно пишу статьи о глубинной психологии, бессознательном и интересных техниках, которые вы можете попробовать уже прямо сейчас</p>
                 <a href="https://t.me/mtdbzr" target="_blank" class="inline-flex items-center justify-center gap-3 bg-[#FEA6A6] text-black px-8 py-4 rounded-full font-bold uppercase tracking-widest text-sm hover:scale-105 transition-transform">
@@ -822,19 +840,19 @@ body {
       Ответы <span class="text-[#7D857E]">на вопросы</span>
     </h2>
   </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start reveal delay-100" >
+  <div class="flex flex-col border-t border-white/10 reveal delay-100" >
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 md:col-span-2"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
         <div class="flex items-center justify-between">
-            <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как проходит работа?</h4>
-            <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
-                <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как проходит работа?</h4>
+            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
+                <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
         </div>
         <div class="faq-answer">
-            <div class="pt-6 mt-6 border-t border-white/10">
+            <div class="pt-8">
                 
-                <div class="process-timeline max-w-5xl mx-auto">
+                <div class="process-timeline max-w-5xl">
                     <div class="timeline-item">
                         <div class="process-card relative p-8 bg-black/20">
                             <span class="absolute top-4 right-6 text-lg font-host font-black text-[#FEA6A6] block">01</span>
@@ -869,75 +887,75 @@ body {
     </div>
 
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Сколько нужно сессий?</h4>
-        <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
-          <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Сколько нужно сессий?</h4>
+        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
+          <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
       <div class="faq-answer">
-        <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">Количество сессий обговаривается индивидуально. При принятии решения о завершении терапии обязательно проводится заключительная сессия для подведения итогов работы.</p>
+        <p class="pt-6 text-sm md:text-base text-[#A8B0A9] leading-relaxed">Количество сессий обговаривается индивидуально. При принятии решения о завершении терапии обязательно проводится заключительная сессия для подведения итогов работы.</p>
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как подготовиться?</h4>
-        <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
-          <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как подготовиться?</h4>
+        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
+          <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
       <div class="faq-answer">
-        <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">Специальной подготовки не требуется. На каждую сессию желательно иметь под рукой тетрадь (лист бумаги) и ручку – для записи инсайтов, а также стакан воды. О дополнительных инструментах (цветные карандаши, бОльшее количество бумаги) сообщаю заранее перед сессией.</p>
+        <p class="pt-6 text-sm md:text-base text-[#A8B0A9] leading-relaxed">Специальной подготовки не требуется. На каждую сессию желательно иметь под рукой тетрадь (лист бумаги) и ручку – для записи инсайтов, а также стакан воды. О дополнительных инструментах (цветные карандаши, бОльшее количество бумаги) сообщаю заранее перед сессией.</p>
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Работаете ли с парами?</h4>
-        <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
-          <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Работаете ли с парами?</h4>
+        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
+          <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
       <div class="faq-answer">
-        <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">На данный момент я не специализируюсь на групповой (семейной терапии), но могу порекомендовать Вам соответствующих специалистов.</p>
+        <p class="pt-6 text-sm md:text-base text-[#A8B0A9] leading-relaxed">На данный момент я не специализируюсь на групповой (семейной терапии), но могу порекомендовать Вам соответствующих специалистов.</p>
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Конфиденциальность?</h4>
-        <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
-          <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Конфиденциальность?</h4>
+        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
+          <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
       <div class="faq-answer">
-        <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">Все, что вы приносите на сессию – остается только на сессии, за исключением полученной информации, которая может нанести вред Вам и окружающим. В случае, если случай не входит в пределы моей компетенции – я предложу Вам обратиться к соответствующим специалистам.</p>
+        <p class="pt-6 text-sm md:text-base text-[#A8B0A9] leading-relaxed">Все, что вы приносите на сессию – остается только на сессии, за исключением полученной информации, которая может нанести вред Вам и окружающим. В случае, если случай не входит в пределы моей компетенции – я предложу Вам обратиться к соответствующим специалистам.</p>
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">А можно ли придет моя подруга?</h4>
-        <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
-          <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">А можно ли придет моя подруга?</h4>
+        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
+          <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
       <div class="faq-answer">
-        <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">В случае если я работаю с Вами, то не имею права быть психотерапевтом для близких Вам людей (муж/сестра/подруга), т.к. это может повлиять на оба процесса терапии.</p>
+        <p class="pt-6 text-sm md:text-base text-[#A8B0A9] leading-relaxed">В случае если я работаю с Вами, то не имею права быть психотерапевтом для близких Вам людей (муж/сестра/подруга), т.к. это может повлиять на оба процесса терапии.</p>
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer bg-white/5 p-6 lg:p-8 rounded-2xl"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-lg font-host font-medium text-[#EAEFEA] transition-colors pr-4">Если я передумаю приходить на сессию?</h4>
-        <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-white/5 group-hover:bg-white/10 rounded-full transition-colors">
-          <svg class="faq-icon w-6 h-6 text-[#7D857E] transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Если я передумаю приходить на сессию?</h4>
+        <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
+          <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
       </div>
       <div class="faq-answer">
-        <p class="pt-6 mt-6 border-t border-white/10 text-sm md:text-base text-[#A8B0A9]">В случае продолжительной терапии переносы/отмена сессии производится не менее, чем за 24 часа до назначенной даты. В случае более поздней отмены – сессия оплачивается, но не производится. В случае «форсмажорной» отмены со стороны терапевта менее, чем за 24 часа – сессия переносится, а также следующая сессия будет бесплатной.</p>
+        <p class="pt-6 text-sm md:text-base text-[#A8B0A9] leading-relaxed">В случае продолжительной терапии переносы/отмена сессии производится не менее, чем за 24 часа до назначенной даты. В случае более поздней отмены – сессия оплачивается, но не производится. В случае «форсмажорной» отмены со стороны терапевта менее, чем за 24 часа – сессия переносится, а также следующая сессия будет бесплатной.</p>
       </div>
     </div>
     
@@ -950,15 +968,26 @@ body {
     <img src="img/end.jpg" class="absolute inset-0 w-full h-full object-cover grayscale" alt="Contact background image" referrerpolicy="no-referrer">
     <div class="absolute inset-0 bg-black/70"></div>
     <div class="relative z-10">
-      <h2 class="text-4xl md:text-5xl font-host font-medium mb-10">Контакты</h2>
-      <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-        <a href="https://vk.com/tarotdeviant" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white/10 backdrop-blur-sm text-[#EAEFEA] px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-white/20 transition-all transform hover:-translate-y-1">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"></path></svg>
-          Написать VK
+      <h2 class="text-4xl md:text-5xl font-host font-medium mb-4">Контакты</h2>
+      <p class="text-sm md:text-base text-[#A8B0A9] mb-10 max-w-lg mx-auto">Пишите для записи на консультацию или по любым другим вопросам! </p>
+      <div class="flex flex-row items-center justify-center gap-4 sm:gap-6">
+        <a href="https://vk.com/tarotdeviant" target="_blank" class="inline-flex items-center justify-center bg-white/10 backdrop-blur-sm text-[#EAEFEA] px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold uppercase tracking-wider hover:bg-white/20 transition-all transform hover:-translate-y-1 min-w-[160px] sm:min-w-[200px]">
+          <span class="flex flex-col items-start gap-0">
+            <span class="inline-flex items-center gap-2">
+              Написать VK
+              <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
+            </span>
+            <span class="font-mono text-[10px] opacity-60 lowercase font-normal tracking-normal">vk.com/tarotdeviant</span>
+          </span>
         </a>
-        <a href="https://t.me/nortlin" target="_blank" class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-[#FEA6A6] text-black px-8 py-4 rounded-full font-bold uppercase tracking-wider hover:bg-white transition-all transform hover:-translate-y-1">
-          <svg fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.08l11.96-4.55c.78-.29 1.45.14 1.25.94l-2.4 11.5c-.21.98-.82 1.23-1.6.76l-3.35-2.45-1.59 1.54c-.16.16-.3.3-.51.3z"/></svg>
-          Написать в Telegram
+        <a href="https://t.me/nortlin" target="_blank" class="inline-flex items-center justify-center bg-white/10 backdrop-blur-sm text-[#EAEFEA] px-6 sm:px-8 py-3 sm:py-4 rounded-2xl font-bold uppercase tracking-wider hover:bg-white/20 transition-all transform hover:-translate-y-1 min-w-[160px] sm:min-w-[200px]">
+          <span class="flex flex-col items-start gap-0">
+            <span class="inline-flex items-center gap-2">
+              Telegram
+              <svg class="w-4 h-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M17 7H7M17 7V17"></path></svg>
+            </span>
+            <span class="font-mono text-[10px] opacity-60 lowercase font-normal tracking-normal">t.me/nortlin</span>
+          </span>
         </a>
       </div>
     </div>
@@ -1048,7 +1077,14 @@ body {
     
     // Menu toggle
     let isMenuOpen = false;
-    function toggleMenu() {
+    function toggleMenu(fromPopState = false) {
+        // Ensure fromPopState is exactly true, not an event object
+        const isPopState = fromPopState === true;
+        
+        // If we're closing the menu and it's not from a popstate, 
+        // we might want to skip history.back() if we're navigating to an anchor
+        const isClosing = isMenuOpen;
+        
         isMenuOpen = !isMenuOpen;
         const mobileMenu = document.getElementById('mobile-menu');
         const menuOverlay = document.getElementById('menu-overlay');
@@ -1064,6 +1100,10 @@ body {
             line2.classList.add('opacity-0');
             line3.classList.add('-rotate-45', '-translate-y-2');
             document.body.style.overflow = 'hidden';
+            
+            if (!isPopState) {
+                history.pushState({ menuOpen: true }, '');
+            }
         } else {
             mobileMenu.classList.remove('active');
             menuOverlay.classList.remove('opacity-100');
@@ -1073,6 +1113,16 @@ body {
             line2.classList.remove('opacity-0');
             line3.classList.remove('-rotate-45', '-translate-y-2');
             document.body.style.overflow = '';
+            
+            if (!isPopState && history.state && history.state.menuOpen) {
+                // Only go back if we're not navigating to an anchor
+                // We'll check if the caller was a mobile-link
+                if (window.event && window.event.currentTarget && window.event.currentTarget.classList.contains('mobile-link')) {
+                    // Skip history.back() to allow anchor navigation
+                } else {
+                    history.back();
+                }
+            }
         }
     }
     
@@ -1080,30 +1130,32 @@ body {
     document.getElementById('menu-overlay').addEventListener('click', toggleMenu);
     document.querySelectorAll('.mobile-link').forEach(link => link.addEventListener('click', toggleMenu));
 
-    // Education toggle
-    let isEducationExpanded = false;
-    function toggleEducation() {
-        isEducationExpanded = !isEducationExpanded;
-        const aboutContent = document.getElementById('about-content');
-        if (isEducationExpanded) {
-            aboutContent.classList.add('expanded');
-        } else {
-            aboutContent.classList.remove('expanded');
-        }
-    }
-    document.getElementById('education-toggle').addEventListener('click', toggleEducation);
-
     // FAQ toggle
     let expandedFaq = null;
     function toggleFaq(id) {
-        expandedFaq = expandedFaq === id ? null : id;
+        const wasExpanded = expandedFaq === id;
+        expandedFaq = wasExpanded ? null : id;
+        
+        let targetItem = null;
         document.querySelectorAll('.faq-item').forEach(item => {
-            if (item.getAttribute('data-faq-id') === expandedFaq) {
+            const itemId = item.getAttribute('data-faq-id');
+            if (itemId === expandedFaq) {
                 item.classList.add('active');
+                targetItem = item;
             } else {
                 item.classList.remove('active');
             }
         });
+
+        if (!wasExpanded && targetItem) {
+            // Small delay to allow the layout to start shifting
+            setTimeout(() => {
+                targetItem.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }, 100);
+        }
     }
     
     // Add data-faq-id to faq items
@@ -1251,12 +1303,33 @@ body {
         
         document.getElementById('modal-container').innerHTML = modalHtml;
         document.body.style.overflow = 'hidden';
+        
+        // Push state for back button support
+        history.pushState({ modalOpen: true }, '');
     }
 
-    function closeServiceModal() {
-        document.getElementById('modal-container').innerHTML = '';
+    function closeServiceModal(fromPopState = false) {
+        // Ensure fromPopState is exactly true, not an event object
+        const isPopState = fromPopState === true;
+        const modalContainer = document.getElementById('modal-container');
+        if (modalContainer.innerHTML === '') return;
+        
+        modalContainer.innerHTML = '';
         document.body.style.overflow = '';
+        
+        if (!isPopState && history.state && history.state.modalOpen) {
+            history.back();
+        }
     }
+    
+    // Handle back button/gesture
+    window.addEventListener('popstate', (event) => {
+        if (document.getElementById('service-modal')) {
+            closeServiceModal(true);
+        } else if (isMenuOpen) {
+            toggleMenu(true);
+        }
+    });
     
     // Add click listeners to service cards
     document.querySelectorAll('.service-card').forEach((card, index) => {
