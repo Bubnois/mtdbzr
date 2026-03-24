@@ -30,7 +30,6 @@ body {
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  opacity: 1;
 }
 .background-glow::after {
   content: '';
@@ -44,6 +43,7 @@ body {
   bottom: -250px;
   right: -250px;
   transform: translate(var(--glow-x, 0), var(--glow-y, 0));
+  will-change: transform;
 }
 
 #noise-overlay {
@@ -454,7 +454,7 @@ body {
 </nav>
 
 <!-- Hero -->
-<header id="hero" class="relative h-[80vh] flex items-center justify-center overflow-hidden">
+<header id="hero" class="relative h-[80vh] flex items-center justify-center overflow-hidden z-10">
   <div class="absolute inset-0 z-0 scale-105">
     <img src="img/head.jpg" alt="Hero" class="w-full h-full object-cover object-bottom" referrerpolicy="no-referrer" />
   </div>
@@ -524,10 +524,6 @@ body {
         </div>
     </div>
 </section>
-
-<div class="max-w-7xl mx-auto px-6">
-    <div class="h-px w-full bg-white/10"></div>
-</div>
 
 <!-- Articles -->
 <section id="articles" class="py-16 max-w-7xl mx-auto scroll-mt-20 overflow-hidden">
@@ -659,10 +655,6 @@ body {
     </button>
   </div>
 </section>
-
-<div class="max-w-7xl mx-auto px-6">
-    <div class="h-px w-full bg-white/10"></div>
-</div>
 
 <!-- Redesigned Services (Complete List) -->
 <section id="sessions" class="py-16 px-6 md:px-12 max-w-7xl mx-auto scroll-mt-20">
@@ -825,10 +817,6 @@ body {
   </div>
 </section>
 
-<div class="max-w-7xl mx-auto px-6">
-    <div class="h-px w-full bg-white/10"></div>
-</div>
-
 <!-- FAQ -->
 <section id="faq" class="py-16 px-6 md:px-12 max-w-7xl mx-auto scroll-mt-20">
   <div class="mb-6 max-w-2xl reveal" >
@@ -842,9 +830,9 @@ body {
   </div>
   <div class="flex flex-col border-t border-white/10 reveal delay-100" >
     
-    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
         <div class="flex items-center justify-between">
-            <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как проходит работа?</h4>
+            <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как проходит работа?</h4>
             <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
                 <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
             </div>
@@ -854,28 +842,28 @@ body {
                 
                 <div class="process-timeline max-w-5xl">
                     <div class="timeline-item">
-                        <div class="process-card relative p-8 bg-black/20">
+                        <div class="process-card relative p-6 bg-black/20">
                             <span class="absolute top-4 right-6 text-lg font-host font-black text-[#FEA6A6] block">01</span>
                             <h4 class="font-bold text-lg mb-2 uppercase">Заявка</h4>
                             <p class="text-sm md:text-base text-[#A8B0A9]">Пишете мне в Telegram. Мы кратко обсуждаем запрос и подбираем удобное время.</p>
                         </div>
                     </div>
                     <div class="timeline-item">
-                        <div class="process-card relative p-8 bg-black/20">
+                        <div class="process-card relative p-6 bg-black/20">
                             <span class="absolute top-4 right-6 text-lg font-host font-black text-[#FEA6A6] block">02</span>
                             <h4 class="font-bold text-lg mb-2 uppercase">Бронь</h4>
                             <p class="text-sm md:text-base text-[#A8B0A9]">Для закрепления времени за вами требуется полная предоплата первой сессии.</p>
                         </div>
                     </div>
                     <div class="timeline-item">
-                        <div class="process-card relative p-8 bg-black/20">
+                        <div class="process-card relative p-6 bg-black/20">
                             <span class="absolute top-4 right-6 text-lg font-host font-black text-[#FEA6A6] block">03</span>
                             <h4 class="font-bold text-lg mb-2 uppercase">Сессия</h4>
                             <p class="text-sm md:text-base text-[#A8B0A9]">Встречаемся в назначенное время онлайн в Zoom (для видеосессий) или в удобном для Вас мессенджере (для аудиоформата). Продолжительность сессии 50-60 минут.</p>
                         </div>
                     </div>
                     <div class="timeline-item">
-                        <div class="process-card relative p-8 bg-black/20">
+                        <div class="process-card relative p-6 bg-black/20">
                             <span class="absolute top-4 right-6 text-lg font-host font-black text-[#FEA6A6] block">04</span>
                             <h4 class="font-bold text-lg mb-2 uppercase">Результат</h4>
                             <p class="text-sm md:text-base text-[#A8B0A9]">Инсайты, облегчение и конкретные шаги для дальнейшей работы над собой.</p>
@@ -887,9 +875,9 @@ body {
     </div>
 
     
-    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Сколько нужно сессий?</h4>
+        <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Сколько нужно сессий?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
           <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
@@ -899,9 +887,9 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как подготовиться?</h4>
+        <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как подготовиться?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
           <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
@@ -911,9 +899,9 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Работаете ли с парами?</h4>
+        <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Работаете ли с парами?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
           <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
@@ -923,9 +911,9 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Конфиденциальность?</h4>
+        <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Конфиденциальность?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
           <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
@@ -935,9 +923,9 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">А можно ли придет моя подруга?</h4>
+        <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">А можно ли придет моя подруга?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
           <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
@@ -947,9 +935,9 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-8 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
       <div class="flex items-center justify-between">
-        <h4 class="text-xl md:text-2xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Если я передумаю приходить на сессию?</h4>
+        <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Если я передумаю приходить на сессию?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center bg-white/5 group-hover:bg-[#FEA6A6] group-hover:text-black rounded-full transition-all duration-300">
           <svg class="faq-icon w-6 h-6 text-[#7D857E] group-hover:text-inherit transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
@@ -1048,28 +1036,24 @@ body {
     // Glow effect
     window.addEventListener('scroll', handleGlowEffect);
     window.addEventListener('resize', handleGlowEffect);
+    handleGlowEffect(); // Initialize
     
     function handleGlowEffect() {
         const glowElement = document.querySelector('.background-glow');
-        const heroSection = document.querySelector('#hero');
-        if (!glowElement || !heroSection) return;
+        if (!glowElement) return;
 
-        const scrollY = window.scrollY;
-        const heroHeight = heroSection.offsetHeight;
+        const scrollY = Math.max(0, window.scrollY);
         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-        if (scrollY < heroHeight * 0.8) {
-            glowElement.style.opacity = '0';
-        } else {
-            glowElement.style.opacity = '1';
-        }
         
-        const scrollAfterHero = Math.max(0, scrollY - heroHeight);
-        const scrollableHeightAfterHero = docHeight - heroHeight;
-        const scrollPercent = scrollableHeightAfterHero > 0 ? scrollAfterHero / scrollableHeightAfterHero : 0;
+        // Ensure it's always visible
+        glowElement.style.opacity = '1';
+        
+        const scrollPercent = docHeight > 0 ? Math.min(1, scrollY / docHeight) : 0;
 
-        const xOffset = -50 * scrollPercent;
-        const yOffset = -60 * scrollPercent;
+        // Move it across the screen as we scroll
+        // Starts from bottom-right and moves towards top-left
+        const xOffset = -70 * scrollPercent;
+        const yOffset = -80 * scrollPercent;
 
         glowElement.style.setProperty('--glow-x', `${xOffset}vw`);
         glowElement.style.setProperty('--glow-y', `${yOffset}vh`);
