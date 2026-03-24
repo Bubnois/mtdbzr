@@ -40,10 +40,8 @@ body {
   border-radius: 50%;
   filter: blur(250px);
   opacity: 0.12;
-  bottom: -250px;
-  right: -250px;
-  transform: translate(var(--glow-x, 0), var(--glow-y, 0));
-  will-change: transform;
+  bottom: -150px;
+  right: -150px;
 }
 
 #noise-overlay {
@@ -1034,30 +1032,7 @@ body {
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // Glow effect
-    window.addEventListener('scroll', handleGlowEffect);
-    window.addEventListener('resize', handleGlowEffect);
-    handleGlowEffect(); // Initialize
-    
-    function handleGlowEffect() {
-        const glowElement = document.querySelector('.background-glow');
-        if (!glowElement) return;
-
-        const scrollY = Math.max(0, window.scrollY);
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-        
-        // Ensure it's always visible
-        glowElement.style.opacity = '1';
-        
-        const scrollPercent = docHeight > 0 ? Math.min(1, scrollY / docHeight) : 0;
-
-        // Move it across the screen as we scroll
-        // Starts from bottom-right and moves towards top-left
-        const xOffset = -70 * scrollPercent;
-        const yOffset = -80 * scrollPercent;
-
-        glowElement.style.setProperty('--glow-x', `${xOffset}vw`);
-        glowElement.style.setProperty('--glow-y', `${yOffset}vh`);
-    }
+    // Static glow, no JS needed for animation
     
     // Menu toggle
     let isMenuOpen = false;
