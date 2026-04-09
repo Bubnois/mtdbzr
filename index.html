@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Алина Базарова, психоаналитически ориентированный психолог - возрождаю любовь к символам и посланиям бессознательного в эпоху протоколов и регламентов. Анализирую сновидения и достаю самое скрытое">
+    <meta name="description" content="Психоаналитически ориентированный психолог - возрождаю любовь к символам и посланиям бессознательного в эпоху протоколов и регламентов. Анализирую сновидения и достаю самое скрытое">
     <title>Метод Базаровой</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
@@ -34,14 +34,13 @@ body {
 .background-glow::after {
   content: '';
   position: absolute;
-  width: 600px;
-  height: 600px;
-  background: #A6FEB6;
+  width: 1200px;
+  height: 1200px;
+  background: radial-gradient(circle, #A6FEB6 0%, rgba(166, 254, 182, 0.7) 25%, rgba(166, 254, 182, 0.3) 50%, rgba(166, 254, 182, 0.05) 75%, transparent 100%);
   border-radius: 50%;
-  filter: blur(250px);
   opacity: 0.12;
-  bottom: -150px;
-  right: -150px;
+  bottom: -550px;
+  right: -550px;
 }
 
 #noise-overlay {
@@ -61,7 +60,9 @@ body {
   left: -100%;
   width: 300%;
   height: 300%;
-  filter: url(#noiseFilter);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
   opacity: 0.22;
   animation: noise-jitter 0.2s infinite steps(2);
   will-change: transform;
@@ -1004,17 +1005,6 @@ body {
     </div>
   </div>
 </footer>
-
-<svg style="position: absolute; width: 0; height: 0; overflow: hidden;" xmlns="http://www.w3.org/2000/svg">
-  <filter id="noiseFilter">
-    <feTurbulence 
-      type="fractalNoise" 
-      baseFrequency="0.6" 
-      numOctaves="2" 
-      stitchTiles="stitch"
-      seed="0" />
-  </filter>
-</svg>
 
 <script>
     const faqs = [{"id":"sessions_count","question":"Сколько нужно сессий?","answer":"Количество сессий обговаривается индивидуально. При принятии решения о завершении терапии обязательно проводится заключительная сессия для подведения итогов работы."},{"id":"preparation","question":"Как подготовиться?","answer":"Специальной подготовки не требуется. На каждую сессию желательно иметь под рукой тетрадь (лист бумаги) и ручку – для записи инсайтов, а также стакан воды. О дополнительных инструментах (цветные карандаши, бОльшее количество бумаги) сообщаю заранее перед сессией."},{"id":"couples","question":"Работаете ли с парами?","answer":"На данный момент я не специализируюсь на групповой (семейной терапии), но могу порекомендовать Вам соответствующих специалистов."},{"id":"confidentiality","question":"Конфиденциальность?","answer":"Все, что вы приносите на сессию – остается только на сессии, за исключением полученной информации, которая может нанести вред Вам и окружающим. В случае, если случай не входит в пределы моей компетенции – я предложу Вам обратиться к соответствующим специалистам."},{"id":"friends","question":"А можно ли придет моя подруга?","answer":"В случае если я работаю с Вами, то не имею права быть психотерапевтом для близких Вам людей (муж/сестра/подруга), т.к. это может повлиять на оба процесса терапии."},{"id":"cancellation","question":"Если я передумаю приходить на сессию?","answer":"В случае продолжительной терапии переносы/отмена сессии производится не менее, чем за 24 часа до назначенной даты. В случае более поздней отмены – сессия оплачивается, но не производится. В случае «форсмажорной» отмены со стороны терапевта менее, чем за 24 часа – сессия переносится, а также следующая сессия будет бесплатной."}];
