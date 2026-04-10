@@ -134,6 +134,20 @@ body {
 
 .faq-item {
     scroll-margin-top: 100px;
+    background-color: rgba(255, 255, 255, 0.03);
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    border-radius: 1rem;
+    margin-bottom: 0.75rem;
+    transition: background-color 0.3s ease;
+}
+
+.faq-item:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.faq-item.active {
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .service-card:hover,
@@ -251,49 +265,7 @@ body {
   transform: translateY(-8px) scale(1.02);
 }
 
-/* Desktop alternating timeline */
-@media (min-width: 768px) {
-  .process-timeline {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .process-timeline::before {
-    left: 50%;
-  }
-
-  .timeline-item {
-    padding-left: 0;
-    width: 50%;
-  }
-  
-  .timeline-item:nth-child(odd) {
-    align-self: flex-start;
-    padding-right: 3rem;
-  }
-
-  .timeline-item:nth-child(even) {
-    align-self: flex-end;
-    padding-left: 3rem;
-  }
-  
-  .timeline-item::before {
-    top: 3.2rem;
-  }
-  
-  .timeline-item:nth-child(odd)::before {
-    left: auto;
-    right: -0.5rem;
-    transform: translateX(50%);
-  }
-
-  .timeline-item:nth-child(even)::before {
-    left: -0.5rem;
-    transform: translateX(-50%);
-  }
-}
-
-        .custom-scrollbar::-webkit-scrollbar {
+.custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }
 
@@ -827,9 +799,9 @@ body {
       Ответы <span class="text-[#7D857E]">на вопросы</span>
     </h2>
   </div>
-  <div class="flex flex-col border-t border-white/10 reveal delay-100" >
+  <div class="flex flex-col reveal delay-100" >
     
-    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5"  tabindex="0"  >
         <div class="flex items-center justify-between">
             <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как проходит работа?</h4>
             <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center transition-all duration-300">
@@ -874,7 +846,7 @@ body {
     </div>
 
     
-    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5"  tabindex="0"  >
       <div class="flex items-center justify-between">
         <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Сколько нужно сессий?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center transition-all duration-300">
@@ -886,7 +858,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5"  tabindex="0"  >
       <div class="flex items-center justify-between">
         <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Как подготовиться?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center transition-all duration-300">
@@ -898,7 +870,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5"  tabindex="0"  >
       <div class="flex items-center justify-between">
         <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Работаете ли с парами?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center transition-all duration-300">
@@ -910,7 +882,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5"  tabindex="0"  >
       <div class="flex items-center justify-between">
         <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Конфиденциальность?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center transition-all duration-300">
@@ -922,7 +894,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5"  tabindex="0"  >
       <div class="flex items-center justify-between">
         <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">А можно ли придет моя подруга?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center transition-all duration-300">
@@ -934,7 +906,7 @@ body {
       </div>
     </div>
     
-    <div class="faq-item group cursor-pointer py-5 border-b border-white/10"  tabindex="0"  >
+    <div class="faq-item group cursor-pointer py-5"  tabindex="0"  >
       <div class="flex items-center justify-between">
         <h4 class="text-lg md:text-xl font-host font-medium text-[#EAEFEA] transition-colors pr-4">Если я передумаю приходить на сессию?</h4>
         <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center transition-all duration-300">
@@ -1080,31 +1052,11 @@ body {
     document.querySelectorAll('.mobile-link').forEach(link => link.addEventListener('click', toggleMenu));
 
     // FAQ toggle
-    let expandedFaq = null;
     function toggleFaq(id) {
-        const wasExpanded = expandedFaq === id;
-        expandedFaq = wasExpanded ? null : id;
+        const item = document.querySelector(`.faq-item[data-faq-id="${id}"]`);
+        if (!item) return;
         
-        let targetItem = null;
-        document.querySelectorAll('.faq-item').forEach(item => {
-            const itemId = item.getAttribute('data-faq-id');
-            if (itemId === expandedFaq) {
-                item.classList.add('active');
-                targetItem = item;
-            } else {
-                item.classList.remove('active');
-            }
-        });
-
-        if (!wasExpanded && targetItem) {
-            // Small delay to allow the layout to start shifting
-            setTimeout(() => {
-                targetItem.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                });
-            }, 100);
-        }
+        item.classList.toggle('active');
     }
     
     // Add data-faq-id to faq items
